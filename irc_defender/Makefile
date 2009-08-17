@@ -14,4 +14,6 @@ defender :
 	@echo 'Please edit now defender.conf and than run: ./defender'
 
 clean :
+	@echo 'Cleaning...'
 	@rm *.o
+	@echo 'Cleaning done...'

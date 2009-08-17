@@ -32,9 +32,17 @@ int CMain::main(int argc, char* argv [])
     }else
 	if(argc == 0)
 	{
+		// Read config
+		readConfig("defender.conf");
 		sendConsole("Run server..");
 	}
     return 1;
+}
+
+int CMain::readConfig(char* configfile)
+{
+	sendConsole("Read conf");
+	return;
 }
 
 int CMain::sendConsole(char* text)
