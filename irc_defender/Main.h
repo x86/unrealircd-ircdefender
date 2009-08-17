@@ -9,9 +9,6 @@
 
 class CMain;
 
-#include <string>
-using namespace std;
-
 class CMain
 {
 	public:
