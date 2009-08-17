@@ -7,25 +7,41 @@
     --------------------------------------------
 */
 
-#include <string.h>
+/* Includes */
+#include "Main.h"
 #include <iostream>
+#include <time.h>
+#include <string.h>
+
+/* Namespace */
 using namespace std;
 
-int main(int argc, char* argv [])
+/* Main */
+int Main::main(int argc, char* argv [])
 {
-    if(argc == 2)
+    if(argc == 1)
     {
-        if (strcmp ( argv[1], "--help" ) == 0)
+        if(strcmp(argv[1], "--help") == 0)
         {
-            printf ( "Usage: defender [OPTION]\n\n" );
-            printf ( "  --c [FILE]      Alternate defender config file\n" );
-            printf ( "  --help          Shows this.\n" );
+            sendConsole("Usage: defender [OPTION]\n");
+            sendConsole("  --c [FILE]      Alternative defender config file");
+            sendConsole("  --help          Shows this." );
             return 1;
         }
     }else
 	if(argc == 0)
 	{
-		printf("Run server..");
+		sendConsole("Run server..");
 	}
     return 1;
+}
+
+int Main::sendConsole(char* text)
+{
+	time_t t = time(0);
+	struct tm* lt = localtime(&t);
+	char time_str[15];
+	sprintf_s(time_str, "%02d:%02d:%02d", lt->tm_hour, lt->tm_min, lt->tm_sec);
+	printf("[%s] Defender: %s\n", time_str, text);
+	return 1;
 }
