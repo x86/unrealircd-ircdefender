@@ -53,6 +53,22 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Config"
+			>
+			<File
+				RelativePath=".\defender.conf"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="Linux"
+			>
+			<File
+				RelativePath=".\Makefile"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

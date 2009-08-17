@@ -1,1 +1,1 @@
-Run ./configure && make
+Type: make
