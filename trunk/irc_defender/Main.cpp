@@ -12,6 +12,7 @@
 #include <iostream>
 #include <time.h>
 #include <string.h>
+#include <stdio.h>
 
 /* Namespace */
 using namespace std;
