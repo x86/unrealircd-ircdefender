@@ -45,11 +45,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Defender.cpp"
+				RelativePath=".\Main.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Defender.h"
+				RelativePath=".\Main.h"
 				>
 			</File>
 		</Filter>
