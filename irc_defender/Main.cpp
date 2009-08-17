@@ -17,7 +17,7 @@
 using namespace std;
 
 /* Main */
-int Main::main(int argc, char* argv [])
+int CMain::main(int argc, char* argv [])
 {
     if(argc == 1)
     {
@@ -36,7 +36,7 @@ int Main::main(int argc, char* argv [])
     return 1;
 }
 
-int Main::sendConsole(char* text)
+int CMain::sendConsole(char* text)
 {
 	time_t t = time(0);
 	struct tm* lt = localtime(&t);
