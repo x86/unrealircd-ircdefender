@@ -2,7 +2,7 @@ all : defender
 
 defender :
 	@echo 'Compiling...'
-	@gcc -Wall -o defender ./*.cpp
+	@g++ -Wall -pthread -o defender ./*.cpp
 	@echo ''
 	@echo '------------------------------------------------------------------'
 	@echo 'Compile done, thank you for using IRC Defender.'
