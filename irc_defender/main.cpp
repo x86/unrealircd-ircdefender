@@ -256,8 +256,8 @@ int readConfig(char* filename)
         if(_ch != '#' && _ch != '\n' && _ch != '//')
 		{
             cfg.getline(_buff, 1024);
-            sscanf(_buff, "%s %*s %f", tag, &val);
-            printf("Name: %s Value: %f\n", tag, val);
+            sscanf(_buff, "%s %*s %s", tag, &val);
+            printf("Name: %s Value: %s\n", tag, val);
         }
 
         cfg.ignore(1024, '\n');
