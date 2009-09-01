@@ -246,23 +246,24 @@ void *messageThread(void* x)
 int readConfig(char* filename)
 {
     char _buff[1024], _ch=' ', tag[24];
-    float val;
+    string val;
     ifstream cfg(filename);
 
     while(!cfg.eof())
 	{
         _ch = cfg.get();
-        printf("[%c]\n",_ch);
+
         if(_ch != '#' && _ch != '\n' && _ch != '//')
 		{
             cfg.getline(_buff, 1024);
-            //puts(_buff);
-            sscanf(_buff, "%s %*s %f",tag, &val);
-            printf("Tag: [%c]%s Value: %f\n", _ch, tag, val);
+            sscanf(_buff, "%s %*s %f", tag, &val);
+            printf("Name: %s Value: %f\n", tag, val);
         }
-        cfg.ignore(1024,'\n');
+
+        cfg.ignore(1024, '\n');
         _ch = cfg.peek();
-        while(_ch==' ' && _ch=='\n')
+
+        while(_ch == ' ' && _ch == '\n')
 		{
             cfg.ignore(1024,'\n');
             _ch = cfg.peek();
