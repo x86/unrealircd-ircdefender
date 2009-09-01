@@ -17,7 +17,7 @@
 
 /* Scripts */
 #include "Main.h"
-#include "iniparser.h"
+//#include "iniparser.h"
 
 /* Namespace */
 using namespace std;
@@ -38,17 +38,15 @@ int CMain::main(int argc, char* argv[])
 	if(argc == 0)
 	{
 		// Read config
-		parse_ini_file("defender.conf");
+		//parse_ini_file("defender.conf");
 		sendConsole("Run server..");
 	}
     return 1;
 }
 
-int CMain::parse_ini_file(char* ini_name)
+/*int CMain::parse_ini_file(char* ini_name)
 {
 	dictionary	*	ini;
-
-	/* Some temporary variables to hold query results */
 	int				b ;
 	int				i ;
 	double			d ;
@@ -69,7 +67,6 @@ int CMain::parse_ini_file(char* ini_name)
 	s = iniparser_getstring(ini, "irc:password", NULL);
     printf("Password:     [%s]\n", s ? s : "UNDEF");
 
-/*
 	printf("Wine:\n");
 	s = iniparser_getstring(ini, "wine:grape", NULL);
     printf("Grape:     [%s]\n", s ? s : "UNDEF");
@@ -81,11 +78,11 @@ int CMain::parse_ini_file(char* ini_name)
     printf("Country:   [%s]\n", s ? s : "UNDEF");
 	
     d = iniparser_getdouble(ini, "wine:alcohol", -1.0);
-    printf("Alcohol:   [%g]\n", d);*/
+    printf("Alcohol:   [%g]\n", d);
 
 	iniparser_freedict(ini);
 	return 0;
-}
+}*/
 
 int CMain::sendConsole(char* text)
 {
