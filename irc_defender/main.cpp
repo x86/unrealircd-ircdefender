@@ -120,8 +120,11 @@ void startServer(char* configfile)
         }
 
         // Connect to irc
+		const char *ircadresChar;
+		ircadresChar = ircadres.c_str();
+
         destination.sin_port = htons(ircport);
-        destination.sin_addr.s_addr = inet_addr(ircadres);
+        destination.sin_addr.s_addr = inet_addr(ircadresChar);
         if (connect(ircSocket, (struct sockaddr *)&destination, sizeof(destination)) != 0)
         {
                 sendConsole("PANIC -> Socket Connection FAILED!");
@@ -164,7 +167,7 @@ void closesocket(int socket)
 int sendData(std::string text)
 {
 		string output = text;
-		send(ircSocket, output.c_str, output.length(), 0);
+		send(ircSocket, output.c_str(), output.length(), 0);
         return 1;
 }
 
