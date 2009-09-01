@@ -21,6 +21,10 @@
 #include <cstdlib>
 #include <sys/select.h>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <map>
+#include <list>
 
 // Scripts
 #include "configreader.h"
@@ -32,6 +36,7 @@ int ircSocket;
 pthread_t t;
 
 // Config vars
+map<string, string> config;
 string ircadres;
 int ircport;
 string ircpass;
@@ -101,7 +106,8 @@ void startServer(char* configfile)
         struct sockaddr_in destination;
 
 		// Read config and Set data..
-		Config config(configfile, "");
+		readConfig();
+		Config config(configfile, "A");
 
 		ircadres = config.pString("irc");
 		ircport = config.pInt("port");
@@ -234,4 +240,34 @@ void *messageThread(void* x)
          }
 }
     }
+}
+
+int readConfig(char* filename)
+{
+    char _buff[1024], _ch=' ', tag[24];
+    float val;
+    ifstream cfg(filename);
+
+    while(!cfg.eof())
+	{
+        _ch = cfg.get();
+        printf("[%c]\n",_ch);
+        if(_ch != '#' && _ch != '\n' && _ch != '//')
+		{
+            cfg.getline(_buff, 1024);
+            //puts(_buff);
+            sscanf(_buff, "%s %*s %f",tag, &val);
+            printf("Tag: [%c]%s Value: %f\n", _ch, tag, val);
+        }
+        cfg.ignore(1024,'\n');
+        _ch = cfg.peek();
+        while(_ch==' ' && _ch=='\n')
+		{
+            cfg.ignore(1024,'\n');
+            _ch = cfg.peek();
+        }
+    }
+
+    cfg.close();
+    return 0;
 }
