@@ -8,86 +8,186 @@
 */
 
 /* *UNIX */
-#include <iostream>
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <pthread.h>
+#include <netdb.h>
+#include <cstdlib>
+#include <sys/select.h>
 
-/* Scripts */
-#include "main.h"
-//#include "iniparser.h"
+// Vars
+int ircSocket;
+pthread_t t;
 
-/* Namespace */
-using namespace std;
+// Functions
+int sendConsole(char* text);
+void startServer();
+void closesocket(int socket);
+int sendData(char* text);
+void *messageThread(void* x);
+void onDataReceived(char* msg);
 
+/* ------------------------------------------------------------------------------------------------------*/
 /* Main */
 int main(int argc, char* argv[])
 {
-    if(argc == 1)
+    if(argc != 0 && argc == 2)
     {
+        // TODO: add --config [file]  (or not)
         if(strcmp(argv[1], "--help") == 0)
         {
-            CMain::sendConsole("Usage: defender [OPTION]\n");
-            CMain::sendConsole("  --c [FILE]      Alternative defender config file");
-            CMain::sendConsole("  --help          Shows this." );
+            sendConsole("\n------------[IRC Defender]------------\n");
+            sendConsole("Usage: defender [OPTION]");
+            sendConsole("  --config [FILE]      Alternative defender config file");
+            sendConsole("  --help               Shows this.");
+            sendConsole("  --credits            Shows the credits.\n");
+            sendConsole("\n------------[IRC Defender]------------");
             return 1;
         }
-    }else
-	if(argc == 0)
-	{
-		// Read config
-		//parse_ini_file("defender.conf");
-		CMain::sendConsole("Run server..");
-	}
+        if(strcmp(argv[1], "--credits") == 0)
+        {
+            sendConsole("\n------------[IRC Defender Credits]------------\n");
+            sendConsole("  Head developer(s):");
+            sendConsole(" - i386           <sebasdevelopment@gmx.com");
+            sendConsole("\n");
+            sendConsole("  Special thanks:");
+            sendConsole(" - UnrealIRCd\n");
+            sendConsole("\n------------[IRC Defender Credits]------------");
+            return 1;
+        }
+    }
+
+    // Read config
+    //parse_ini_file("defender.conf");
+    sendConsole("Server started..\n");
+    startServer();
+
+    // Close server
+    sendConsole("Stopping server..\n");
+    // TODO: Remove sockets..
     return 1;
 }
 
-/*int CMain::parse_ini_file(char* ini_name)
+void startServer()
 {
-	dictionary	*	ini;
-	int				b ;
-	int				i ;
-	double			d ;
-	char		*	s ;
+        // Vars
+        struct sockaddr_in destination;
 
-	ini = iniparser_load(ini_name);
-	if (ini == NULL)
-	{
-		sendConsole("Cannot read config file!");
-		return -1;
-	}
-	iniparser_dump(ini, stderr);
+        // Create Socket
+        destination.sin_family = AF_INET;
+        ircSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+        if (ircSocket < 0)
+        {
+                sendConsole("PANIC -> Socket Creation FAILED!");
+                return;
+        }
 
-	s = iniparser_getstring(ini, "irc:irc", NULL);
-    printf("IRC Adres:     [%s]\n", s ? s : "UNDEF");
-    i = iniparser_getint(ini, "irc:port", -1);
-    printf("Year:      [%d]\n", i);
-	s = iniparser_getstring(ini, "irc:password", NULL);
-    printf("Password:     [%s]\n", s ? s : "UNDEF");
+        // Connect to irc
+        destination.sin_port = htons(3827);
+        destination.sin_addr.s_addr = inet_addr("127.0.0.1");
+        if (connect(ircSocket, (struct sockaddr *)&destination, sizeof(destination)) != 0)
+        {
+                sendConsole("PANIC -> Socket Connection FAILED!");
+                if (ircSocket)
+                {
+                        closesocket(ircSocket);
+                }
+                return;
+        }
 
-	printf("Wine:\n");
-	s = iniparser_getstring(ini, "wine:grape", NULL);
-    printf("Grape:     [%s]\n", s ? s : "UNDEF");
-	
-    i = iniparser_getint(ini, "wine:year", -1);
-    printf("Year:      [%d]\n", i);
+        pthread_create(&t, 0, messageThread, NULL);
 
-	s = iniparser_getstring(ini, "wine:country", NULL);
-    printf("Country:   [%s]\n", s ? s : "UNDEF");
-	
-    d = iniparser_getdouble(ini, "wine:alcohol", -1.0);
-    printf("Alcohol:   [%g]\n", d);
+        // Send auth
+        sendData("PASS :PASSWORD\r\n");
+        sendData("PROTOCTL NOQUIT\r\n");
+        sendData("SERVER defender.servername.nl 1 :IRC Defender\r\n");
 
-	iniparser_freedict(ini);
-	return 0;
-}*/
+        // Create bots..
+        sendData("SQLINE Defender :reserved 4 IRC Defender\r\n");
+        sendData("NICK Defender 1 0001 Defender defender.servername.nl defender.servername.nl 001 :IRC Defender\r\n");
+        sendData(":Defender MODE Defender +Sq\r\n");
+        sendData(":Defender JOIN #services\r\n");
+        sendData(":Defender MODE #services +o Defender\r\n");
 
-int CMain::sendConsole(char* text)
+        // ....
+        sendConsole("OK -> Connected!");
+        while(true) { int y=0; y=1; }
+}
+
+void closesocket(int socket)
 {
-	time_t t = time(0);
-	struct tm* lt = localtime(&t);
-	printf("[%02d:%02d:%02d] Defender: %s\n", lt->tm_hour, lt->tm_min, lt->tm_sec, text);
-	return 1;
+        close(socket);
+        sendConsole("INFO -> Socket closed!");
+        return;
+}
+
+int sendData(char* text)
+{
+        send(ircSocket, text, strlen(text), 0);
+        return 1;
+}
+
+int sendConsole(char* text)
+{
+        time_t t = time(0);
+        struct tm* lt = localtime(&t);
+        printf("[%02d:%02d:%02d] Defender: %s\n", lt->tm_hour, lt->tm_min, lt->tm_sec, text);
+        return 1;
+}
+
+void onDataReceived(char* msg)
+{
+        // Check for "PING"
+        if(strncmp(msg, "PING", 4) == 0)
+        {
+                // Send "PONG" back
+                msg[1] = 'O';
+                sendData("PONG :REPLY\r\n");
+                sendConsole("Ping received, ponged back.");
+        }
+
+        sendConsole(msg);
+        return;
+}
+
+void *messageThread(void* x)
+{
+
+    fd_set fdSetRead;
+    timeval timeout;
+    FD_ZERO(&fdSetRead);
+    FD_SET(ircSocket, &fdSetRead);
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 0;
+
+    while((select(0, &fdSetRead, NULL, NULL, &timeout)) != -1)
+    {
+         sendConsole("Hoi");
+         char buf[1024];
+         int i = recv(ircSocket, buf, 1024, 0);
+         if(i > 0)
+         {
+                buf[i] = '\0';
+                char part[512];
+                for (i = 0; i < (int)strlen(buf); i++)
+                {
+                        if (buf[i] == '\n')
+                        {
+                                onDataReceived(part);
+                                memset(&part, 0, sizeof(part));
+                        }else
+                        if (buf[i] != '\r')
+                        {
+                                part[strlen(part)] = buf[i];
+                        }
+                }
+         }
+         //Sleep(50);
+    }
 }
