@@ -52,6 +52,7 @@ int closesocket(int socket);
 int sendData(std::string text);
 void *messageThread(void* x);
 void onDataReceived(char* msg);
+int readConfig(char* filename);
 
 /* ------------------------------------------------------------------------------------------------------*/
 /* Main */
@@ -106,7 +107,7 @@ void startServer(char* configfile)
         struct sockaddr_in destination;
 
 		// Read config and Set data..
-		readConfig();
+		readConfig(configfile);
 		Config config(configfile, "A");
 
 		ircadres = config.pString("irc");
