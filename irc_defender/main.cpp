@@ -21,10 +21,6 @@
 #include <cstdlib>
 #include <sys/select.h>
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <map>
-#include <list>
 
 // Scripts
 #include "configreader.h"
@@ -36,7 +32,6 @@ int ircSocket;
 pthread_t t;
 
 // Config vars
-map<string, string> config;
 string ircadres;
 int ircport;
 string ircpass;
@@ -52,7 +47,6 @@ int closesocket(int socket);
 int sendData(std::string text);
 void *messageThread(void* x);
 void onDataReceived(char* msg);
-int readConfig(char* filename);
 
 /* ------------------------------------------------------------------------------------------------------*/
 /* Main */
@@ -90,12 +84,12 @@ int main(int argc, char* argv[])
 		}
 	}else{
 		// Start server
-		sendConsole("Server started..\n");
+		sendConsole("Server started..");
 		startServer("defender.conf");
 	}
 
     // Close server
-    sendConsole("Stopping server..\n");
+    sendConsole("Stopping server..\n.");
     closesocket(ircSocket);
 
     return 1;
@@ -103,22 +97,10 @@ int main(int argc, char* argv[])
 
 void startServer(char* configfile)
 {
-        // Vars
-        struct sockaddr_in destination;
-
-		// Read config and Set data..
-		readConfig(configfile);
-		Config config(configfile, "A");
-
-		ircadres = config.pString("irc");
-		ircport = config.pInt("port");
-		ircpass = config.pString("password");
-		servicesname = config.pString("ulinename");
-		botnick = config.pString("botnick");
-		logchannel = config.pString("logchannel");
-		enablelogging = config.pBool("enablelogging");
+		// TODO: Read config and Set data..
 
         // Create Socket
+        struct sockaddr_in destination;
         destination.sin_family = AF_INET;
         ircSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         if (ircSocket < 0)
@@ -189,14 +171,31 @@ int sendConsole(char* text)
 
 void onDataReceived(char* msg)
 {
-        if(strncmp(msg, "PING", 4) == 0) // Check for "PING"
+		// Ping handler
+        if(strncmp(msg, "PING", 4) == 0)
         {
-                // Send "PONG" back
                 msg[1] = 'O';
                 sendData("PONG :REPLY\r\n");
                 sendConsole("Ping received, ponged back.");
         }
 
+		// Command handler
+		char *argument[MAX_ARGS], *token_p;
+		int argument_count;
+
+		token_p = strtok(buffer, " "); 
+        argument_count = 0; 
+  
+		while (token_p != NULL) 
+		{ 
+			argument[argument_count] = token_p; 
+			token_p = strtok(NULL, " "); 
+			argument_count++; 
+		}
+
+
+
+		// Post debug to server.
         sendConsole(msg);
         return;
 }
@@ -241,35 +240,4 @@ void *messageThread(void* x)
          }
 }
     }
-}
-
-int readConfig(char* filename)
-{
-    char _buff[1024], _ch=' ', tag[24];
-    char* val;
-    ifstream cfg(filename);
-
-    while(!cfg.eof())
-	{
-        _ch = cfg.get();
-
-        if(_ch != '#' && _ch != '\n' && _ch != '//')
-		{
-            cfg.getline(_buff, 1024);
-            sscanf(_buff, "%s %*s %s", tag, &val);
-            printf("Name: %s Value: %s\n", tag, val);
-        }
-
-        cfg.ignore(1024, '\n');
-        _ch = cfg.peek();
-
-        while(_ch == ' ' && _ch == '\n')
-		{
-            cfg.ignore(1024,'\n');
-            _ch = cfg.peek();
-        }
-    }
-
-    cfg.close();
-    return 0;
 }
