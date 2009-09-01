@@ -69,6 +69,30 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="Libs"
+			>
+			<Filter
+				Name="iniParser"
+				>
+				<File
+					RelativePath="..\..\Users\Sebas\Desktop\iniparser3.0b\src\dictionary.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Users\Sebas\Desktop\iniparser3.0b\src\dictionary.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Users\Sebas\Desktop\iniparser3.0b\src\iniparser.c"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Users\Sebas\Desktop\iniparser3.0b\src\iniparser.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
