@@ -7,18 +7,23 @@
     --------------------------------------------
 */
 
-/* Includes */
-#include "Main.h"
+/* *UNIX */
 #include <iostream>
 #include <time.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+/* Scripts */
+#include "Main.h"
+#include "iniparser.h"
 
 /* Namespace */
 using namespace std;
 
 /* Main */
-int CMain::main(int argc, char* argv [])
+int CMain::main(int argc, char* argv[])
 {
     if(argc == 1)
     {
@@ -33,16 +38,53 @@ int CMain::main(int argc, char* argv [])
 	if(argc == 0)
 	{
 		// Read config
-		readConfig("defender.conf");
+		parse_ini_file("defender.conf");
 		sendConsole("Run server..");
 	}
     return 1;
 }
 
-int CMain::readConfig(char* configfile)
+int CMain::parse_ini_file(char* ini_name)
 {
-	sendConsole("Read conf");
-	return;
+	dictionary	*	ini;
+
+	/* Some temporary variables to hold query results */
+	int				b ;
+	int				i ;
+	double			d ;
+	char		*	s ;
+
+	ini = iniparser_load(ini_name);
+	if (ini == NULL)
+	{
+		sendConsole("Cannot read config file!");
+		return -1;
+	}
+	iniparser_dump(ini, stderr);
+
+	s = iniparser_getstring(ini, "irc:irc", NULL);
+    printf("IRC Adres:     [%s]\n", s ? s : "UNDEF");
+    i = iniparser_getint(ini, "irc:port", -1);
+    printf("Year:      [%d]\n", i);
+	s = iniparser_getstring(ini, "irc:password", NULL);
+    printf("Password:     [%s]\n", s ? s : "UNDEF");
+
+/*
+	printf("Wine:\n");
+	s = iniparser_getstring(ini, "wine:grape", NULL);
+    printf("Grape:     [%s]\n", s ? s : "UNDEF");
+	
+    i = iniparser_getint(ini, "wine:year", -1);
+    printf("Year:      [%d]\n", i);
+
+	s = iniparser_getstring(ini, "wine:country", NULL);
+    printf("Country:   [%s]\n", s ? s : "UNDEF");
+	
+    d = iniparser_getdouble(ini, "wine:alcohol", -1.0);
+    printf("Alcohol:   [%g]\n", d);*/
+
+	iniparser_freedict(ini);
+	return 0;
 }
 
 int CMain::sendConsole(char* text)
