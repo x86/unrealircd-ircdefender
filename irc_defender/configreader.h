@@ -37,6 +37,7 @@ class Config {
 		 * is provided, environment variables can be used as expansion symbols.
 		 */
 		Config(string configFile, char** envp = 0);
+		Config(string name, string parentDebugInfo);
 
 		~Config();
 		
@@ -72,7 +73,7 @@ class Config {
 
 	private:
 		// private constructor for sub groups
-		Config(string name, string parentDebugInfo);
+		//Config(string name, string parentDebugInfo);
 
 		// helper functions for parsing
 		void add(string name, string value);

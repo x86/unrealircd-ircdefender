@@ -163,7 +163,8 @@ void closesocket(int socket)
 
 int sendData(std::string text)
 {
-        send(ircSocket, text, strlen(text), 0);
+		string output = text;
+		send(ircSocket, output.c_str, output.length(), 0);
         return 1;
 }
 
