@@ -14,5 +14,5 @@ class CMain
 	public:
 		static int		sendConsole         (char* text);
 		static int		main				(int argc, char* argv[]);
-		static int		parse_ini_file		(char* ini_name);
+		//static int		parse_ini_file		(char* ini_name);
 };
