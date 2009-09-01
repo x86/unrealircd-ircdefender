@@ -45,11 +45,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Main.cpp"
+				RelativePath=".\main.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Main.h"
+				RelativePath=".\main.h"
 				>
 			</File>
 		</Filter>
@@ -76,19 +76,19 @@
 				Name="iniParser"
 				>
 				<File
-					RelativePath="..\..\Users\Sebas\Desktop\iniparser3.0b\src\dictionary.c"
+					RelativePath=".\dictionary.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Users\Sebas\Desktop\iniparser3.0b\src\dictionary.h"
+					RelativePath=".\dictionary.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Users\Sebas\Desktop\iniparser3.0b\src\iniparser.c"
+					RelativePath=".\iniparser.c"
 					>
 				</File>
 				<File
-					RelativePath="..\..\Users\Sebas\Desktop\iniparser3.0b\src\iniparser.h"
+					RelativePath=".\iniparser.h"
 					>
 				</File>
 			</Filter>
