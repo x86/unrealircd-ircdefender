@@ -83,6 +83,14 @@
 					RelativePath=".\configreader.h"
 					>
 				</File>
+				<File
+					RelativePath=".\log.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\log.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
