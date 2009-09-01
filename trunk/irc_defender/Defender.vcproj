@@ -73,22 +73,14 @@
 			Name="Libs"
 			>
 			<Filter
-				Name="iniParser"
+				Name="configReader"
 				>
 				<File
-					RelativePath=".\dictionary.c"
+					RelativePath=".\configreader.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\dictionary.h"
-					>
-				</File>
-				<File
-					RelativePath=".\iniparser.c"
-					>
-				</File>
-				<File
-					RelativePath=".\iniparser.h"
+					RelativePath=".\configreader.h"
 					>
 				</File>
 			</Filter>
