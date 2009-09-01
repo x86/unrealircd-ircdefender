@@ -20,16 +20,31 @@
 #include <netdb.h>
 #include <cstdlib>
 #include <sys/select.h>
+#include <iostream>
+
+// Scripts
+#include "configreader.h"
+
+using namespace std;
 
 // Vars
 int ircSocket;
 pthread_t t;
 
+// Config vars
+string ircadres;
+int ircport;
+string ircpass;
+string servicesname;
+string botnick;
+string logchannel;
+bool enablelogging;
+
 // Functions
 int sendConsole(char* text);
-void startServer();
+void startServer(char* configfile);
 void closesocket(int socket);
-int sendData(char* text);
+int sendData(std::string text);
 void *messageThread(void* x);
 void onDataReceived(char* msg);
 
@@ -61,12 +76,17 @@ int main(int argc, char* argv[])
             sendConsole("\n------------[IRC Defender Credits]------------");
             return 1;
         }
-    }
-
-    // Read config
-    //parse_ini_file("defender.conf");
-    sendConsole("Server started..\n");
-    startServer();
+		if(strcmp(argv[1], "--config") == 0)
+        {
+			// Start server
+			sendConsole("Server started..\n");
+			startServer(argv[2]);
+		}
+	}else{
+		// Start server
+		sendConsole("Server started..\n");
+		startServer("defender.conf");
+	}
 
     // Close server
     sendConsole("Stopping server..\n");
@@ -74,10 +94,21 @@ int main(int argc, char* argv[])
     return 1;
 }
 
-void startServer()
+void startServer(char* configfile)
 {
         // Vars
         struct sockaddr_in destination;
+
+		// Read config and Set data..
+		Config config(configfile, "0");
+
+		ircadres = config.pString("irc");
+		ircport = config.pInt("port");
+		ircpass = config.pString("password");
+		servicesname = config.pString("ulinename");
+		botnick = config.pString("botnick");
+		logchannel = config.pString("logchannel");
+		enablelogging = config.pBool("enablelogging");
 
         // Create Socket
         destination.sin_family = AF_INET;
@@ -89,8 +120,8 @@ void startServer()
         }
 
         // Connect to irc
-        destination.sin_port = htons(3827);
-        destination.sin_addr.s_addr = inet_addr("127.0.0.1");
+        destination.sin_port = htons(ircport);
+        destination.sin_addr.s_addr = inet_addr(ircadres);
         if (connect(ircSocket, (struct sockaddr *)&destination, sizeof(destination)) != 0)
         {
                 sendConsole("PANIC -> Socket Connection FAILED!");
@@ -101,23 +132,26 @@ void startServer()
                 return;
         }
 
+		// Start thread
         pthread_create(&t, 0, messageThread, NULL);
 
         // Send auth
-        sendData("PASS :PASSWORD\r\n");
+        sendData("PASS :" + ircpass + "\r\n");
         sendData("PROTOCTL NOQUIT\r\n");
-        sendData("SERVER defender.servername.nl 1 :IRC Defender\r\n");
+        sendData("SERVER " + servicesname + " 1 :IRC Defender\r\n");
+        sendData("EOS\r\n");
 
-        // Create bots..
-        sendData("SQLINE Defender :reserved 4 IRC Defender\r\n");
-        sendData("NICK Defender 1 0001 Defender defender.servername.nl defender.servername.nl 001 :IRC Defender\r\n");
-        sendData(":Defender MODE Defender +Sq\r\n");
-        sendData(":Defender JOIN #services\r\n");
-        sendData(":Defender MODE #services +o Defender\r\n");
+        // Create bot..
+        sendData("SQLINE " + botnick + " :reserved 4 IRC Defender\r\n");
+        sendData("NICK " + botnick + " 1 0001 " + botnick + " " + servicesname + " " + servicesname + " 001 :IRC Defender\r\n");
+        sendData(":" + botnick + " MODE " + botnick + " +Sq\r\n");
+        sendData(":" + botnick + " JOIN " + logchannel + "\r\n");
+        sendData(":" + botnick + " MODE " + logchannel + " +o " + botnick + "\r\n");
+        sendData(":" + botnick + " PRIVMSG " + logchannel + " :Logging here..\r\n");
 
         // ....
-        sendConsole("OK -> Connected!");
-        while(true) { int y=0; y=1; }
+        sendConsole("INFO -> Connected!");
+        while(true) { } // Keep server alive!
 }
 
 void closesocket(int socket)
@@ -127,7 +161,7 @@ void closesocket(int socket)
         return;
 }
 
-int sendData(char* text)
+int sendData(std::string text)
 {
         send(ircSocket, text, strlen(text), 0);
         return 1;
@@ -143,8 +177,7 @@ int sendConsole(char* text)
 
 void onDataReceived(char* msg)
 {
-        // Check for "PING"
-        if(strncmp(msg, "PING", 4) == 0)
+        if(strncmp(msg, "PING", 4) == 0) // Check for "PING"
         {
                 // Send "PONG" back
                 msg[1] = 'O';
@@ -158,7 +191,6 @@ void onDataReceived(char* msg)
 
 void *messageThread(void* x)
 {
-
     fd_set fdSetRead;
     timeval timeout;
     FD_ZERO(&fdSetRead);
@@ -166,15 +198,22 @@ void *messageThread(void* x)
     timeout.tv_sec = 0;
     timeout.tv_usec = 0;
 
-    while((select(0, &fdSetRead, NULL, NULL, &timeout)) != -1)
+	// Thread created!
+    sendConsole("INFO -> Thread started (SUCCES)!");
+
+	// While!
+    while(true)
     {
-         sendConsole("Hoi");
+		usleep(70); // MS
+        int rc = select(0, &fdSetRead, NULL, NULL, &timeout);
+        if(rc != -1)
+{
          char buf[1024];
          int i = recv(ircSocket, buf, 1024, 0);
          if(i > 0)
          {
                 buf[i] = '\0';
-                char part[512];
+                char part[1024];
                 for (i = 0; i < (int)strlen(buf); i++)
                 {
                         if (buf[i] == '\n')
@@ -188,6 +227,6 @@ void *messageThread(void* x)
                         }
                 }
          }
-         //Sleep(50);
+}
     }
 }
