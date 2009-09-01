@@ -246,7 +246,7 @@ void *messageThread(void* x)
 int readConfig(char* filename)
 {
     char _buff[1024], _ch=' ', tag[24];
-    string val;
+    char* val;
     ifstream cfg(filename);
 
     while(!cfg.eof())
