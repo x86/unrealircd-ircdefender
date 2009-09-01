@@ -29,9 +29,9 @@ int main(int argc, char* argv[])
     {
         if(strcmp(argv[1], "--help") == 0)
         {
-            sendConsole("Usage: defender [OPTION]\n");
-            sendConsole("  --c [FILE]      Alternative defender config file");
-            sendConsole("  --help          Shows this." );
+            CMain::sendConsole("Usage: defender [OPTION]\n");
+            CMain::sendConsole("  --c [FILE]      Alternative defender config file");
+            CMain::sendConsole("  --help          Shows this." );
             return 1;
         }
     }else
@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 	{
 		// Read config
 		//parse_ini_file("defender.conf");
-		sendConsole("Run server..");
+		CMain::sendConsole("Run server..");
 	}
     return 1;
 }
