@@ -43,7 +43,7 @@ bool enablelogging;
 // Functions
 int sendConsole(char* text);
 void startServer(char* configfile);
-void closesocket(int socket);
+int closesocket(int socket);
 int sendData(std::string text);
 void *messageThread(void* x);
 void onDataReceived(char* msg);
@@ -90,7 +90,8 @@ int main(int argc, char* argv[])
 
     // Close server
     sendConsole("Stopping server..\n");
-    // TODO: Remove sockets..
+    closesocket(ircSocket);
+
     return 1;
 }
 
@@ -100,7 +101,7 @@ void startServer(char* configfile)
         struct sockaddr_in destination;
 
 		// Read config and Set data..
-		Config config(configfile, "0");
+		Config config(configfile, "");
 
 		ircadres = config.pString("irc");
 		ircport = config.pInt("port");
@@ -157,11 +158,11 @@ void startServer(char* configfile)
         while(true) { } // Keep server alive!
 }
 
-void closesocket(int socket)
+int closesocket(int socket)
 {
         close(socket);
         sendConsole("INFO -> Socket closed!");
-        return;
+        return 1;
 }
 
 int sendData(std::string text)

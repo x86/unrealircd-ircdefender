@@ -71,7 +71,6 @@ class Config {
 			return groups;
 		}
 
-	private:
 		// private constructor for sub groups
 		//Config(string name, string parentDebugInfo);
 
