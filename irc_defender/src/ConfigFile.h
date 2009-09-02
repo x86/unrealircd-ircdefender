@@ -66,7 +66,7 @@ protected:
 public:
 	ConfigFile( string filename,
 	            string delimiter = "=",
-	            string comment = "//",
+	            string comment = "|",
 				string sentry = "EndConfigFile" );
 	ConfigFile();
 	
