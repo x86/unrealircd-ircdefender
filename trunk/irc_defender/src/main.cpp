@@ -43,8 +43,10 @@ bool enablelogging;
 // Functions
 int sendConsole(char* text);
 void startServer(char* configfile);
+int stopServer();
 int closesocket(int socket);
 int sendData(std::string text);
+int handleCommands(char* data);
 void *messageThread(void* x);
 void onDataReceived(char* msg);
 
@@ -88,8 +90,8 @@ int main(int argc, char* argv[])
 	}
 
     // Close server
-    closesocket(ircSocket);
     sendConsole("Stopping server..\n.");
+    closesocket(ircSocket);
 
     return 1;
 }
@@ -154,6 +156,13 @@ void startServer(char* configfile)
         while(true) { } // Keep server alive!
 }
 
+int stopServer()
+{
+		sendConsole("PANIC -> There was an error found, see the log files!");
+		closesocket(ircSocket);
+		return 1;
+}
+
 int closesocket(int socket)
 {
 		if(socket > 0)
@@ -161,6 +170,7 @@ int closesocket(int socket)
 			close(socket);
 			sendConsole("INFO -> Socket closed!");
 		}
+		exit(1);
         return 1;
 }
 
@@ -179,8 +189,21 @@ int sendConsole(char* text)
         return 1;
 }
 
+int handleCommands(char* data)
+{
+
+	return 1;
+}
+
 void onDataReceived(char* msg)
 {
+		// Error handler
+		if(strncmp(msg, "ERROR :", 7) == 0)
+		{
+			stopServer();
+			// ERROR :Link denied
+		}
+
 		// Ping handler
         if(strncmp(msg, "PING", 4) == 0)
         {
@@ -189,8 +212,8 @@ void onDataReceived(char* msg)
                 sendConsole("Ping received, ponged back.");
         }
 
-		// TODO: Command handler
-
+		// Command handler
+		handleCommands(msg);
 
 		// Post debug to server.
         sendConsole(msg);
@@ -199,6 +222,7 @@ void onDataReceived(char* msg)
 
 void *messageThread(void* x)
 {
+	usleep(50);
     fd_set fdSetRead;
     timeval timeout;
     FD_ZERO(&fdSetRead);
