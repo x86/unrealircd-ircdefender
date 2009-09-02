@@ -45,6 +45,8 @@ int sendConsole(char* text);
 void startServer(char* configfile);
 int stopServer();
 int closesocket(int socket);
+int sendLog(std::string text);
+int sendMessage(std::string user, std::string text);
 int sendData(std::string text);
 int handleCommands(char* data);
 void *messageThread(void* x);
@@ -137,15 +139,19 @@ void startServer(char* configfile)
         // Send auth
         sendData("PASS :" + ircpass + "\r\n");
         sendData("PROTOCTL NOQUIT\r\n");
-        sendData("SERVER " + servicesname + " 1 :IRC Defender by i386\r\n");
+        sendData("SERVER " + servicesname + " 1 :IRCDefender\r\n");
         sendData("EOS\r\n");
 
+		sendConsole("Waiting, cool down..");
+		sleep(5); // Seconds
+
         // Create bot..
-        sendData("SQLINE " + botnick + " :reserved 4 IRC Defender by i386\r\n");
-        sendData("NICK " + botnick + " 1 0001 " + botnick + " " + servicesname + " " + servicesname + " 001 :IRC Defender by i386\r\n");
+        sendData("SQLINE " + botnick + " :reserved 4 IRCDefender\r\n");
+        sendData("NICK " + botnick + " 1 0001 " + botnick + " " + servicesname + " " + servicesname + " 001 :IRCDefender\r\n");
         sendData(":" + botnick + " MODE " + botnick + " +Sq\r\n");
         sendData(":" + botnick + " JOIN " + logchannel + "\r\n");
         sendData(":" + botnick + " MODE " + logchannel + " +o " + botnick + "\r\n");
+
 		if(enablelogging)
 		{
 			sendData(":" + botnick + " PRIVMSG " + logchannel + " :Logging here..\r\n");
@@ -174,6 +180,21 @@ int closesocket(int socket)
         return 1;
 }
 
+int sendLog(std::string text)
+{
+	if(enablelogging)
+	{
+		sendData(":" + botnick + " PRIVMSG " + logchannel + " :" + text + "\r\n");
+	}
+	return 1;
+}
+
+int sendMessage(std::string user, std::string text)
+{
+	sendData(":" + botnick + " NOTICE " + user + " :" + text + "\r\n");
+	return 1;
+}
+
 int sendData(std::string text)
 {
 		string output = text;
@@ -191,7 +212,82 @@ int sendConsole(char* text)
 
 int handleCommands(char* data)
 {
+	string str = data;
 
+	// Check
+	size_t found = str.find(" PRIVMSG " + botnick + " :");
+	if (found == string::npos) { return 0; }
+
+	// Example for requesting help:
+	// :Sebas PRIVMSG Defender :help
+	str = str.substr(1);
+	size_t foundName = str.find_first_of(" ");
+	string user = str.substr(0, foundName).c_str();
+	size_t commandName = str.find_first_of(":");
+	string command = str.substr(commandName+1).c_str();
+	string arguments = "";
+
+	size_t anyArguments = command.find_first_of(" ");
+	if(anyArguments != string::npos)
+	{
+		// We found arguments.
+		arguments = command.substr(anyArguments).c_str();
+		command = str.substr(commandName+1, anyArguments).c_str();
+	}
+
+	if(user == "NeoStats" || command == " VERSION") { return 0; }
+	if(command == "") { return 0; }
+	
+	string status = "FAIL";
+
+	// Commands
+	if(command == "help" || command == "HELP")
+	{
+		status = "OK";
+		sendMessage(user, "IRCDefender Commands:");
+		sendMessage(user, "  Server:");
+		sendMessage(user, "     HELP                  Shows the help list.");
+		sendMessage(user, "     VERSION               Shows the version.");
+		sendMessage(user, "     CREDITS               Shows the credits.");
+		sendMessage(user, "  Administration:");
+		sendMessage(user, "     LOGIN                 Login to grant admin access.");
+		sendMessage(user, "     SECURE                Modify the secure level.");
+		sendMessage(user, "     EXIT                  Terminate the program with no save.");
+	}else
+	if(command == "version" || command == "VERSION")
+	{
+		status = "OK";
+		sendMessage(user, "IRCDefender Version:");
+		sendMessage(user, "  Core: 1.0");
+		sendMessage(user, "  Defender: 1.0.0002");
+	}else
+	if(command == "credits" || command == "CREDITS")
+	{
+		status = "OK";
+		sendMessage(user, "IRCDefender Credits:");
+		sendMessage(user, "  Head developer(s):");
+		sendMessage(user, "  - i386 <sebasdevelopment@gmx.com>");
+	}else
+	if(command == "join" || command == "JOIN")
+	{
+		status = "OK";
+        sendData(":" + botnick + " JOIN " + arguments + "\r\n");
+        sendData(":" + botnick + " MODE " + arguments + " +ao " + botnick + "\r\n");
+	}else
+	if(command == "part" || command == "PART")
+	{
+		status = "OK";
+		sendData(":" + botnick + " PART " + arguments + " :Requested by: " + user + "\r\n");
+	}
+	
+	if(status == "FAIL")
+	{
+		sendMessage(user, "Command not found, try: /msg " + botnick + " HELP");
+	}
+
+	// Send the log!
+	sendMessage(user, "Notice: All actions will be logged!");
+	sendLog("[" + status + "] " + user + " requested command: " + command);
 	return 1;
 }
 
@@ -236,9 +332,9 @@ void *messageThread(void* x)
 	// While!
     while(true)
     {
-        int rc = select(0, &fdSetRead, NULL, NULL, &timeout);
-        if(rc != -1)
-{
+        //int rc = select(0, &fdSetRead, NULL, NULL, &timeout);
+        //if(rc != -1)
+//{
          char buf[1024];
          int i = recv(ircSocket, buf, 1024, 0);
          if(i > 0)
@@ -259,6 +355,6 @@ void *messageThread(void* x)
                         }
                 }
          }
-}
+//}
     }
 }
