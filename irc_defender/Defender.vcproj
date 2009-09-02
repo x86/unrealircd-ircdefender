@@ -75,22 +75,6 @@
 			<Filter
 				Name="configReader"
 				>
-				<File
-					RelativePath=".\configreader.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\configreader.h"
-					>
-				</File>
-				<File
-					RelativePath=".\log.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\log.h"
-					>
-				</File>
 			</Filter>
 		</Filter>
 	</Files>

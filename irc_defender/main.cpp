@@ -22,10 +22,10 @@
 #include <sys/select.h>
 #include <iostream>
 
-// Scripts
-#include "configreader.h"
-
 using namespace std;
+
+// Scripts
+#include "ConfigFile.h"
 
 // Vars
 int ircSocket;
@@ -54,7 +54,6 @@ int main(int argc, char* argv[])
 {
     if(argc != 0 && argc == 2)
     {
-        // TODO: add --config [file]  (or not)
         if(strcmp(argv[1], "--help") == 0)
         {
             sendConsole("\n------------[IRC Defender]------------\n");
@@ -97,7 +96,16 @@ int main(int argc, char* argv[])
 
 void startServer(char* configfile)
 {
-		// TODO: Read config and Set data..
+		// Read config and Set data..
+		ConfigFile config("example.inp");
+
+		config.readInto(ircadres, "irc");
+		config.readInto(ircport, "port");
+		config.readInto(ircpass, "password");
+		config.readInto(servicesname, "ulinename");
+		config.readInto(botnick, "botnick");
+		config.readInto(logchannel, "logchannel");
+		config.readInto(enablelogging, "enablelogging");
 
         // Create Socket
         struct sockaddr_in destination;
@@ -135,8 +143,8 @@ void startServer(char* configfile)
         sendData("EOS\r\n");
 
         // Create bot..
-        sendData("SQLINE " + botnick + " :reserved 4 IRC Defender\r\n");
-        sendData("NICK " + botnick + " 1 0001 " + botnick + " " + servicesname + " " + servicesname + " 001 :IRC Defender\r\n");
+        sendData("SQLINE " + botnick + " :reserved 4 IRC Defender by i386\r\n");
+        sendData("NICK " + botnick + " 1 0001 " + botnick + " " + servicesname + " " + servicesname + " 001 :IRC Defender by i386\r\n");
         sendData(":" + botnick + " MODE " + botnick + " +Sq\r\n");
         sendData(":" + botnick + " JOIN " + logchannel + "\r\n");
         sendData(":" + botnick + " MODE " + logchannel + " +o " + botnick + "\r\n");
@@ -179,20 +187,7 @@ void onDataReceived(char* msg)
                 sendConsole("Ping received, ponged back.");
         }
 
-		// Command handler
-		char *argument[MAX_ARGS], *token_p;
-		int argument_count;
-
-		token_p = strtok(buffer, " "); 
-        argument_count = 0; 
-  
-		while (token_p != NULL) 
-		{ 
-			argument[argument_count] = token_p; 
-			token_p = strtok(NULL, " "); 
-			argument_count++; 
-		}
-
+		// TODO: Command handler
 
 
 		// Post debug to server.
