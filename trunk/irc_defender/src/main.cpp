@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
 void startServer(char* configfile)
 {
 		// Read config and Set data..
-		ConfigFile config("example.inp");
+		ConfigFile config(configfile);
 
 		config.readInto(ircadres, "irc");
 		config.readInto(ircport, "port");
