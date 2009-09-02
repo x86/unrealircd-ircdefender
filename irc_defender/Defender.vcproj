@@ -4,6 +4,7 @@
 	Version="9,00"
 	Name="Defender"
 	ProjectGUID="{5F29B1C5-E0BD-4A43-B089-69FD18B72F79}"
+	RootNamespace="Defender"
 	Keyword="MakeFileProj"
 	TargetFrameworkVersion="196613"
 	>
@@ -45,11 +46,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\main.cpp"
+				RelativePath="src\main.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\main.h"
+				RelativePath="src\main.h"
 				>
 			</File>
 		</Filter>
@@ -75,6 +76,14 @@
 			<Filter
 				Name="configReader"
 				>
+				<File
+					RelativePath="src\ConfigFile.cpp"
+					>
+				</File>
+				<File
+					RelativePath="src\ConfigFile.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
