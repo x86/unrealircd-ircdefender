@@ -2,7 +2,6 @@ all : defender
 
 defender :
 	@echo 'Compiling, please wait...'
-	@rm -f defender
 	@g++ -Wall -pthread -o defender src/*.cpp
 	@echo ''
 	@echo '------------------------------------------------------------------'

@@ -56,23 +56,23 @@ int main(int argc, char* argv[])
     {
         if(strcmp(argv[1], "--help") == 0)
         {
-            sendConsole("\n------------[IRC Defender]------------\n");
-            sendConsole("Usage: defender [OPTION]");
-            sendConsole("  --config [FILE]      Alternative defender config file");
-            sendConsole("  --help               Shows this.");
-            sendConsole("  --credits            Shows the credits.\n");
-            sendConsole("\n------------[IRC Defender]------------");
+            printf("\n---------------------[IRC Defender]---------------------\n");
+            printf("Usage: defender [OPTION] [ARGUMENT]");
+            printf("  --config [FILE]      Alternative defender config file");
+            printf("  --help               Shows this.");
+            printf("  --credits            Shows the credits.\n");
+            printf("\n---------------------[IRC Defender]---------------------");
             return 1;
         }
         if(strcmp(argv[1], "--credits") == 0)
         {
-            sendConsole("\n------------[IRC Defender Credits]------------\n");
-            sendConsole("  Head developer(s):");
-            sendConsole(" - i386           <sebasdevelopment@gmx.com");
-            sendConsole("\n");
-            sendConsole("  Special thanks:");
-            sendConsole(" - UnrealIRCd\n");
-            sendConsole("\n------------[IRC Defender Credits]------------");
+            printf("\n---------------------[IRC Defender Credits]-------------\n");
+            printf("  Head developer(s):");
+            printf(" - i386           <sebasdevelopment@gmx.com");
+            printf("\n");
+            printf("  Special thanks:");
+            printf(" - UnrealIRCd\n");
+            printf("\n---------------------[IRC Defender Credits]-------------");
             return 1;
         }
 		if(strcmp(argv[1], "--config") == 0)
@@ -88,8 +88,8 @@ int main(int argc, char* argv[])
 	}
 
     // Close server
-    sendConsole("Stopping server..\n.");
     closesocket(ircSocket);
+    sendConsole("Stopping server..\n.");
 
     return 1;
 }
@@ -126,10 +126,6 @@ void startServer(char* configfile)
         if (connect(ircSocket, (struct sockaddr *)&destination, sizeof(destination)) != 0)
         {
                 sendConsole("PANIC -> Socket Connection FAILED!");
-                if (ircSocket)
-                {
-                        closesocket(ircSocket);
-                }
                 return;
         }
 
@@ -139,7 +135,7 @@ void startServer(char* configfile)
         // Send auth
         sendData("PASS :" + ircpass + "\r\n");
         sendData("PROTOCTL NOQUIT\r\n");
-        sendData("SERVER " + servicesname + " 1 :IRC Defender\r\n");
+        sendData("SERVER " + servicesname + " 1 :IRC Defender by i386\r\n");
         sendData("EOS\r\n");
 
         // Create bot..
@@ -148,7 +144,10 @@ void startServer(char* configfile)
         sendData(":" + botnick + " MODE " + botnick + " +Sq\r\n");
         sendData(":" + botnick + " JOIN " + logchannel + "\r\n");
         sendData(":" + botnick + " MODE " + logchannel + " +o " + botnick + "\r\n");
-        sendData(":" + botnick + " PRIVMSG " + logchannel + " :Logging here..\r\n");
+		if(enablelogging)
+		{
+			sendData(":" + botnick + " PRIVMSG " + logchannel + " :Logging here..\r\n");
+		}
 
         // ....
         sendConsole("INFO -> Connected!");
@@ -157,8 +156,11 @@ void startServer(char* configfile)
 
 int closesocket(int socket)
 {
-        close(socket);
-        sendConsole("INFO -> Socket closed!");
+		if(socket > 0)
+		{
+			close(socket);
+			sendConsole("INFO -> Socket closed!");
+		}
         return 1;
 }
 
@@ -210,7 +212,6 @@ void *messageThread(void* x)
 	// While!
     while(true)
     {
-		usleep(70); // MS
         int rc = select(0, &fdSetRead, NULL, NULL, &timeout);
         if(rc != -1)
 {
@@ -226,6 +227,7 @@ void *messageThread(void* x)
                         {
                                 onDataReceived(part);
                                 memset(&part, 0, sizeof(part));
+								usleep(70); // MS
                         }else
                         if (buf[i] != '\r')
                         {
