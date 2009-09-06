@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <pthread.h>
-using namespace std;
+using std::string;
 
 class CConnection
 {
@@ -21,18 +21,18 @@ class CConnection
 		void startServer		(char* configfile);
 		int stopServer			();
 		int closesocket			(int socket);
-		int sendData			(std::string text);
+		int sendData			(string text);
 		void *messageThread		(void* x);
 		void onDataReceived		(char* msg);
 	private:
 		int ircSocket;
 		pthread_t t;
-		std::string ircadres;
+		string ircadres;
 		int ircport;
-		std::string ircpass;
-		std::string servicesname;
-		std::string botnick;
-		std::string logchannel;
+		string ircpass;
+		string servicesname;
+		string botnick;
+		string logchannel;
 		bool enablelogging;
 };
 #endif

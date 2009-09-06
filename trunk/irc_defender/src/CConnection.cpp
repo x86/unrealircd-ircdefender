@@ -19,6 +19,8 @@
 #include <cstdlib>
 #include <sys/select.h>
 
+using namespace std;
+
 #include "CConfig.h"
 #include "CConnection.h"
 #include "CCommands.h"

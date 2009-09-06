@@ -12,13 +12,13 @@
 
 #include <string.h>
 #include <stdio.h>
-using namespace std;
+using std::string;
 
 class CLogging
 {
 	public:
 		int sendConsole			(char* text);
-		int sendLog				(std::string text);
-		int sendMessage			(std::string user, std::string text);
+		int sendLog				(string text);
+		int sendMessage			(string user, string text);
 };
 #endif
