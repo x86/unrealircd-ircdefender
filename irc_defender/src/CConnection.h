@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <pthread.h>
-using namespace std;
+using std;
 
 class CConnection
 {
