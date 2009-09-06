@@ -10,15 +10,6 @@
 /* *UNIX */
 #include <string.h>
 #include <stdio.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <pthread.h>
-#include <netdb.h>
-#include <cstdlib>
-#include <sys/select.h>
 
 using namespace std;
 
@@ -27,6 +18,7 @@ using namespace std;
 
 // Functions
 //bool getUserLevel(std::string user, char* level);
+CConection connection;
 
 // -----------------------------------------------------------
 int main(int argc, char* argv[])
@@ -68,7 +60,7 @@ int main(int argc, char* argv[])
 
     // Close server
 	CLogging::sendConsole("Stopping server..\n.");
-	CConnection::closesocket(CConection::ircSocket);
+	CConnection::closesocket(connection.ircSocket);
 
     return 1;
 }
