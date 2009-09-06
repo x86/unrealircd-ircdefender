@@ -15,7 +15,7 @@
 class CCommands
 {
 	public:
-		static	int search				(char *string, char *substring);
-		static	int handleCommands		(char* data);
+		int search				(char *string, char *substring);
+		int handleCommands		(char* data);
 };
 #endif

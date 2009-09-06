@@ -17,21 +17,21 @@
 class CConnection
 {
 	public:
-		static	void startServer		(char* configfile);
-		static	int stopServer			();
-		static	int closesocket			(int socket);
-		static	int sendData			(std::string text);
-		static	void* messageThread		(void* x);
-		static	void onDataReceived		(char* msg);
+		void startServer		(char* configfile);
+		int stopServer			();
+		int closesocket			(int socket);
+		int sendData			(std::string text);
+		void* messageThread		(void* x);
+		void onDataReceived		(char* msg);
 	//private:
-		static	int ircSocket;
-		static	pthread_t t;
-		static	std::string ircadres;
-		static	int ircport;
-		static	std::string ircpass;
-		static	std::string servicesname;
-		static	std::string botnick;
-		static	std::string logchannel;
-		static	bool enablelogging;
+		int ircSocket;
+		pthread_t t;
+		std::string ircadres;
+		int ircport;
+		std::string ircpass;
+		std::string servicesname;
+		std::string botnick;
+		std::string logchannel;
+		bool enablelogging;
 };
 #endif
