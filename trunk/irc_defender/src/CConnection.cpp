@@ -67,7 +67,7 @@ void CConnection::startServer(char* configfile)
         }
 
 		// Start thread
-		pthread_create(&t, 0, connection.messageThread, NULL);
+		pthread_create(&t, 0, messageThread, NULL);
 
         // Send auth
         connection.sendData("PASS :" + connection.ircpass + "\r\n");
