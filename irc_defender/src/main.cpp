@@ -18,7 +18,8 @@ using namespace std;
 
 // Functions
 //bool getUserLevel(std::string user, char* level);
-CConection connection;
+
+CConnection connection;
 
 // -----------------------------------------------------------
 int main(int argc, char* argv[])
