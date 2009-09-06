@@ -20,6 +20,7 @@ using namespace std;
 //bool getUserLevel(std::string user, char* level);
 
 CConnection connection;
+CLogging logging;
 
 // -----------------------------------------------------------
 int main(int argc, char* argv[])
@@ -50,18 +51,18 @@ int main(int argc, char* argv[])
 		if(strcmp(argv[1], "--config") == 0)
         {
 			// Start server
-			CLogging::sendConsole("Server started..\n");
-			CConnection::startServer(argv[2]);
+			logging.sendConsole("Server started..\n");
+			connection.startServer(argv[2]);
 		}
 	}else{
 		// Start server
-		CLogging::sendConsole("Server started..");
-		CConnection::startServer("defender.conf");
+		logging.sendConsole("Server started..");
+		connection.startServer("defender.conf");
 	}
 
     // Close server
-	CLogging::sendConsole("Stopping server..\n.");
-	CConnection::closesocket(connection.ircSocket);
+	logging.sendConsole("Stopping server..\n.");
+	connection.closesocket(connection.ircSocket);
 
     return 1;
 }
