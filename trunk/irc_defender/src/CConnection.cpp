@@ -27,9 +27,11 @@ using namespace std;
 #include "CLogging.h"
 
 CConnection connection;
+CLogging logging;
+CCommands commands;
 
 // -----------------------------------------------------------
-void CConnection::startServer(char* configfile)
+void connection.startServer(char* configfile)
 {
 		// Read config and Set data..
 		ConfigFile config(configfile);
@@ -48,7 +50,7 @@ void CConnection::startServer(char* configfile)
         connection.ircSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
         if (connection.ircSocket < 0)
         {
-                CLogging::sendConsole("PANIC -> Socket Creation FAILED!");
+                logging.sendConsole("PANIC -> Socket Creation FAILED!");
                 return;
         }
 
@@ -60,91 +62,91 @@ void CConnection::startServer(char* configfile)
         destination.sin_addr.s_addr = inet_addr(ircadresChar);
         if (connect(ircSocket, (struct sockaddr *)&destination, sizeof(destination)) != 0)
         {
-                CLogging::sendConsole("PANIC -> Socket Connection FAILED!");
+                logging.sendConsole("PANIC -> Socket Connection FAILED!");
                 return;
         }
 
 		// Start thread
-		pthread_create(&t, 0, CConnection::messageThread, NULL);
+		pthread_create(&t, 0, connection.messageThread, NULL);
 
         // Send auth
-        CConnection::sendData("PASS :" + connection.ircpass + "\r\n");
-        CConnection::sendData("PROTOCTL NOQUIT\r\n");
-        CConnection::sendData("SERVER " + connection.servicesname + " 1 :IRCDefender\r\n");
-        CConnection::sendData("EOS\r\n");
+        connection.sendData("PASS :" + connection.ircpass + "\r\n");
+        connection.sendData("PROTOCTL NOQUIT\r\n");
+        connection.sendData("SERVER " + connection.servicesname + " 1 :IRCDefender\r\n");
+        connection.sendData("EOS\r\n");
 
         // Create bot..
-        CConnection::sendData("SQLINE " + connection.botnick + " :reserved 4 IRCDefender\r\n");
-        CConnection::sendData("NICK " + connection.botnick + " 1 0001 " + connection.botnick + " " + connection.servicesname + " " + connection.servicesname + " 001 :IRCDefender\r\n");
-        CConnection::sendData(":" + connection.botnick + " MODE " + connection.botnick + " +Sq\r\n");
-        CConnection::sendData(":" + connection.botnick + " JOIN " + connection.logchannel + "\r\n");
-        CConnection::sendData(":" + connection.botnick + " MODE " + connection.logchannel + " +o " + connection.botnick + "\r\n");
+        connection.sendData("SQLINE " + connection.botnick + " :reserved 4 IRCDefender\r\n");
+        connection.sendData("NICK " + connection.botnick + " 1 0001 " + connection.botnick + " " + connection.servicesname + " " + connection.servicesname + " 001 :IRCDefender\r\n");
+        connection.sendData(":" + connection.botnick + " MODE " + connection.botnick + " +Sq\r\n");
+        connection.sendData(":" + connection.botnick + " JOIN " + connection.logchannel + "\r\n");
+        connection.sendData(":" + connection.botnick + " MODE " + connection.logchannel + " +o " + connection.botnick + "\r\n");
 
 		if(connection.enablelogging)
 		{
-			CConnection::sendData(":" + connection.botnick + " PRIVMSG " + connection.logchannel + " :Logging here..\r\n");
+			connection.sendData(":" + connection.botnick + " PRIVMSG " + connection.logchannel + " :Logging here..\r\n");
 		}
 
         // ....
-        CLogging::sendConsole("INFO -> Connected!");
+        logging.sendConsole("INFO -> Connected!");
         while(true) { } // Keep server alive!
 }
 
-int CConnection::stopServer()
+int connection.stopServer()
 {
-		CLogging::sendConsole("PANIC -> There was an error found, see the log files!");
-		CConnection::closesocket(connection.ircSocket);
+		logging.sendConsole("PANIC -> There was an error found, see the log files!");
+		connection.closesocket(connection.ircSocket);
 		return 1;
 }
 
-int CConnection::sendData(std::string text)
+int connection.sendData(std::string text)
 {
 		string output = text;
 		send(connection.ircSocket, output.c_str(), output.length(), 0);
         return 1;
 }
 
-int CConnection::closesocket(int socket)
+int connection.closesocket(int socket)
 {
 		if(socket > 0)
 		{
 			close(socket);
-			CLogging::sendConsole("INFO -> Socket closed!");
+			logging.sendConsole("INFO -> Socket closed!");
 		}
 		exit(1);
         return 1;
 }
 
 
-void CConnection::onDataReceived(char* msg)
+void connection.onDataReceived(char* msg)
 {
 		// Error handler
 		if(strncmp(msg, "ERROR :", 7) == 0)
 		{
 			// ERROR :Link denied
-			CConnection::stopServer();
+			connection.stopServer();
 		}
 
 		// Ping handler
         if(strncmp(msg, "PING", 4) == 0)
         {
                 msg[1] = 'O';
-				CConnection::sendData("PONG :REPLY\r\n");
-                CLogging::sendConsole("Ping received, ponged back.");
+				connection.sendData("PONG :REPLY\r\n");
+                logging.sendConsole("Ping received, ponged back.");
         }
 
 		// Command handler
-		CCommands::handleCommands(msg);
+		commands.handleCommands(msg);
 
 		// Post debug to server.
 		// TODO: Hide this when releasing.
-        CLogging::sendConsole(msg);
+        logging.sendConsole(msg);
 		// -----
 
         return;
 }
 
-void *CConnection::messageThread(void* x)
+void *connection.messageThread(void* x)
 {
     while(true)
     {
@@ -158,7 +160,7 @@ void *CConnection::messageThread(void* x)
                 {
                         if (buf[i] == '\n')
                         {
-								CConnection::onDataReceived(part);
+								connection.onDataReceived(part);
                                 memset(&part, 0, sizeof(part));
 								usleep(70); // MS
                         }else
