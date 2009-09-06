@@ -148,7 +148,7 @@ int CCommands::handleCommands(char* data)
 	}
 
 	// Send the log!
-	CConnection::sendMessage(user, "Notice: All actions will be logged!");
+	CLogging::sendMessage(user, "Notice: All actions will be logged!");
 	CLogging::sendLog("[" + status + "] " + user + " requested command: " + command);
 	return 1;
 }

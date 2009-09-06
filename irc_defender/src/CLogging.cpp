@@ -16,7 +16,7 @@ using namespace std;
 #include "CConnection.h"
 
 // -----------------------------------------------------------
-int CLogging::sendLog(string text)
+int CLogging::sendLog(std::string text)
 {
 	if(CConnection::enablelogging)
 	{
@@ -25,7 +25,7 @@ int CLogging::sendLog(string text)
 	return 1;
 }
 
-int CLogging::sendMessage(string user, string text)
+int CLogging::sendMessage(std::string user, std::string text)
 {
 	CConnection::sendData(":" + CConnection::botnick + " NOTICE " + user + " :" + text + "\r\n");
 	return 1;
