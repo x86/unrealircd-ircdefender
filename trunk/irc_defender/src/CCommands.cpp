@@ -7,7 +7,7 @@
     --------------------------------------------
 */
 
-#include <string.h>
+#include <string>
 #include <stdio.h>
 
 using namespace std;
