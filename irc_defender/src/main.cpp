@@ -19,6 +19,7 @@
 #include <netdb.h>
 #include <cstdlib>
 #include <sys/select.h>
+
 using namespace std;
 
 #include "CConnection.h"
@@ -67,7 +68,7 @@ int main(int argc, char* argv[])
 
     // Close server
 	CLogging::sendConsole("Stopping server..\n.");
-	CConnection::closesocket(ircSocket);
+	CConnection::closesocket(CConection::ircSocket);
 
     return 1;
 }
