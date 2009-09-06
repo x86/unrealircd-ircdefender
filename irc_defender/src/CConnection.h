@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <pthread.h>
-using std;
+using namespace std;
 
 class CConnection
 {
@@ -27,12 +27,12 @@ class CConnection
 	private:
 		int ircSocket;
 		pthread_t t;
-		string ircadres;
+		std::string ircadres;
 		int ircport;
-		string ircpass;
-		string servicesname;
-		string botnick;
-		string logchannel;
+		std::string ircpass;
+		std::string servicesname;
+		std::string botnick;
+		std::string logchannel;
 		bool enablelogging;
 };
 #endif
