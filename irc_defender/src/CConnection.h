@@ -17,12 +17,12 @@
 class CConnection
 {
 	public:
-		void CConnection::startServer		(char* configfile);
-		int CConnection::stopServer			();
-		int CConnection::closesocket			(int socket);
-		int CConnection::sendData			(std::string text);
-		void *CConnection::messageThread		(void* x);
-		void CConnection::onDataReceived		(char* msg);
+		void startServer		(char* configfile);
+		int stopServer			();
+		int closesocket			(int socket);
+		int sendData			(std::string text);
+		void *messageThread		(void* x);
+		void onDataReceived		(char* msg);
 	//private:
 		int ircSocket;
 		pthread_t t;
