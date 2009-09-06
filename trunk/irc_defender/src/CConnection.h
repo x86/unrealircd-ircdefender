@@ -23,7 +23,7 @@ class CConnection
 		int sendData			(std::string text);
 		void *messageThread		(void* x);
 		void onDataReceived		(char* msg);
-	private:
+	//private:
 		int ircSocket;
 		pthread_t t;
 		std::string ircadres;
