@@ -15,19 +15,20 @@ using namespace std;
 #include "CLogging.h"
 #include "CConnection.h"
 
+CConnection connection;
 // -----------------------------------------------------------
-int CLogging::sendLog(std::string text)
+int CLogging::sendLog(string text)
 {
-	if(CConnection::enablelogging)
+	if(connection.enablelogging)
 	{
-		CConnection::sendData(":" + CConnection::botnick + " PRIVMSG " + CConnection::logchannel + " :" + text + "\r\n");
+		CConnection::sendData(":" + connection.botnick + " PRIVMSG " + connection.logchannel + " :" + text + "\r\n");
 	}
 	return 1;
 }
 
-int CLogging::sendMessage(std::string user, std::string text)
+int CLogging::sendMessage(string user, string text)
 {
-	CConnection::sendData(":" + CConnection::botnick + " NOTICE " + user + " :" + text + "\r\n");
+	CConnection::sendData(":" + connection.botnick + " NOTICE " + user + " :" + text + "\r\n");
 	return 1;
 }
 
