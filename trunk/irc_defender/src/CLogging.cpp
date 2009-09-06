@@ -6,7 +6,7 @@
     Developers: i386 <sebasdevelopment@gmx.com>
     --------------------------------------------
 */
-#include <string.h>
+#include <string>
 #include <stdio.h>
 #include <pthread.h>
 

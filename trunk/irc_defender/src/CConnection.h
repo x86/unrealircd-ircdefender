@@ -10,7 +10,7 @@
 #ifndef __CCONNECTION_H
 #define __CCONNECTION_H
 
-#include <string.h>
+#include <string>
 #include <stdio.h>
 #include <pthread.h>
 
