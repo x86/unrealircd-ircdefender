@@ -15,7 +15,7 @@
 class CCommands
 {
 	public:
-		int CCommands::search				(char *string, char *substring);
-		int CCommands::handleCommands		(char* data);
+		int search				(char *string, char *substring);
+		int handleCommands		(char* data);
 };
 #endif

@@ -21,14 +21,14 @@ int CLogging::sendLog(string text)
 {
 	if(connection.enablelogging)
 	{
-		CConnection::sendData(":" + connection.botnick + " PRIVMSG " + connection.logchannel + " :" + text + "\r\n");
+		connection.sendData(":" + connection.botnick + " PRIVMSG " + connection.logchannel + " :" + text + "\r\n");
 	}
 	return 1;
 }
 
 int CLogging::sendMessage(string user, string text)
 {
-	CConnection::sendData(":" + connection.botnick + " NOTICE " + user + " :" + text + "\r\n");
+	connection.sendData(":" + connection.botnick + " NOTICE " + user + " :" + text + "\r\n");
 	return 1;
 }
 

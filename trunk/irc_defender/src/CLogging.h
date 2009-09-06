@@ -16,8 +16,8 @@
 class CLogging
 {
 	public:
-		int CLogging::sendConsole			(char* text);
-		int CLogging::sendLog				(std::string text);
-		int CLogging::sendMessage			(std::string user, std::string text);
+		int sendConsole			(char* text);
+		int sendLog				(std::string text);
+		int sendMessage			(std::string user, std::string text);
 };
 #endif
