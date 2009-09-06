@@ -24,14 +24,14 @@ class CConnection
 		static	void* messageThread		(void* x);
 		static	void onDataReceived		(char* msg);
 	//private:
-		int ircSocket;
-		pthread_t t;
-		std::string ircadres;
-		int ircport;
-		std::string ircpass;
-		std::string servicesname;
-		std::string botnick;
-		std::string logchannel;
-		bool enablelogging;
+		static	int ircSocket;
+		static	pthread_t t;
+		static	std::string ircadres;
+		static	int ircport;
+		static	std::string ircpass;
+		static	std::string servicesname;
+		static	std::string botnick;
+		static	std::string logchannel;
+		static	bool enablelogging;
 };
 #endif
