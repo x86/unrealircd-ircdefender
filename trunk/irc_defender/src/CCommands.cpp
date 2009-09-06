@@ -114,13 +114,13 @@ int CCommands::handleCommands(char* data)
 	if(command == "join" || command == "JOIN")
 	{
 		status = "OK";
-        CConnection::sendData(":" + botnick + " JOIN " + arguments + "\r\n");
-        CConnection::sendData(":" + botnick + " MODE " + arguments + " +ao " + botnick + " " + botnick + "\r\n");
+        CConnection::sendData(":" + connection.botnick + " JOIN " + arguments + "\r\n");
+        CConnection::sendData(":" + connection.botnick + " MODE " + arguments + " +ao " + connection.botnick + " " + connection.botnick + "\r\n");
 	}else
 	if(command == "part" || command == "PART")
 	{
 		status = "OK";
-		CConnection::sendData(":" + botnick + " PART " + arguments + " :Requested by: " + user + "\r\n");
+		CConnection::sendData(":" + connection.botnick + " PART " + arguments + " :Requested by: " + user + "\r\n");
 	}else
 	/*if(command == "check" || command == "CHECK")
 	{
@@ -146,7 +146,7 @@ int CCommands::handleCommands(char* data)
 	
 	if(status == "FAIL")
 	{
-		CLogging::sendMessage(user, "Command not found, try: /msg " + botnick + " HELP");
+		CLogging::sendMessage(user, "Command not found, try: /msg " + connection.botnick + " HELP");
 	}
 
 	// Send the log!
