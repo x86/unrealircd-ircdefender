@@ -31,7 +31,7 @@ CLogging logging;
 CCommands commands;
 
 // -----------------------------------------------------------
-void connection.startServer(char* configfile)
+void CConnection::startServer(char* configfile)
 {
 		// Read config and Set data..
 		ConfigFile config(configfile);
@@ -92,21 +92,21 @@ void connection.startServer(char* configfile)
         while(true) { } // Keep server alive!
 }
 
-int connection.stopServer()
+int CConnection::stopServer()
 {
 		logging.sendConsole("PANIC -> There was an error found, see the log files!");
 		connection.closesocket(connection.ircSocket);
 		return 1;
 }
 
-int connection.sendData(std::string text)
+int CConnection::sendData(std::string text)
 {
 		string output = text;
 		send(connection.ircSocket, output.c_str(), output.length(), 0);
         return 1;
 }
 
-int connection.closesocket(int socket)
+int CConnection::closesocket(int socket)
 {
 		if(socket > 0)
 		{
@@ -118,7 +118,7 @@ int connection.closesocket(int socket)
 }
 
 
-void connection.onDataReceived(char* msg)
+void CConnection::onDataReceived(char* msg)
 {
 		// Error handler
 		if(strncmp(msg, "ERROR :", 7) == 0)
@@ -146,7 +146,7 @@ void connection.onDataReceived(char* msg)
         return;
 }
 
-void *connection.messageThread(void* x)
+void *CConnection::messageThread(void* x)
 {
     while(true)
     {
