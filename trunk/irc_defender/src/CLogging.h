@@ -10,8 +10,8 @@
 #ifndef __CLOGGING_H
 #define __CLOGGING_H
 
-#include <string.h>
 #include <stdio.h>
+#include <string>
 
 class CLogging
 {
