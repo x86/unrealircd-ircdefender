@@ -12,7 +12,7 @@
 
 #include <string.h>
 #include <stdio.h>
-using std;
+using namespace std;
 
 class CLogging
 {
