@@ -41,50 +41,62 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Files"
+			Name="Headers"
 			Filter="cpp;h;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="src\main.cpp"
+				RelativePath=".\src\CCommands.h"
 				>
 			</File>
 			<File
-				RelativePath="src\main.h"
+				RelativePath=".\src\CConfig.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CConnection.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CLogging.h"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="Config"
+			Name="Resources"
 			>
 			<File
 				RelativePath=".\defender.conf"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="Linux"
-			>
 			<File
 				RelativePath=".\Makefile"
 				>
 			</File>
 		</Filter>
 		<Filter
-			Name="Libs"
+			Name="Sources"
 			>
-			<Filter
-				Name="configReader"
+			<File
+				RelativePath=".\src\CCommands.cpp"
 				>
-				<File
-					RelativePath="src\ConfigFile.cpp"
-					>
-				</File>
-				<File
-					RelativePath="src\ConfigFile.h"
-					>
-				</File>
-			</Filter>
+			</File>
+			<File
+				RelativePath=".\src\CConfig.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CConnection.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\CLogging.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\main.cpp"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

@@ -1,20 +1,21 @@
 /*
     --------------------------------------------
     Project:    IRC Defender v1.0
-    Filename:   Main.h
+    Filename:   CConnection.h
     Date:       09 August 2009
     Developers: i386 <sebasdevelopment@gmx.com>
     --------------------------------------------
 */
 
-/*
-class CMain;
+#ifndef __CCOMMANDS_H
+#define __CCOMMANDS_H
 
-class CMain
+#include <stdio.h>
+
+class CCommands
 {
 	public:
-		static int		sendConsole         (char* text);
-		static int		main				(int argc, char* argv[]);
-		static int		parse_ini_file		(char* ini_name);
+		int search				(char *string, char *substring);
+		int handleCommands		(char* data);
 };
-*/
+#endif
