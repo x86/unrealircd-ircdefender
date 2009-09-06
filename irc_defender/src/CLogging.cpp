@@ -9,26 +9,25 @@
 #include <string.h>
 #include <stdio.h>
 #include <pthread.h>
+
 using namespace std;
 
 #include "CLogging.h"
 #include "CConnection.h"
 
 // -----------------------------------------------------------
-int CLogging::sendLog(std::string text)
+int CLogging::sendLog(string text)
 {
-	CConnection connection;
-	if(connection.enablelogging)
+	if(CConnection::enablelogging)
 	{
-		connection.sendData(":" + connection.botnick + " PRIVMSG " + connection.logchannel + " :" + text + "\r\n");
+		CConnection::sendData(":" + CConnection::botnick + " PRIVMSG " + CConnection::logchannel + " :" + text + "\r\n");
 	}
 	return 1;
 }
 
-int CLogging::sendMessage(std::string user, std::string text)
+int CLogging::sendMessage(string user, string text)
 {
-	CConnection connection;
-	connection.sendData(":" + connection.botnick + " NOTICE " + user + " :" + text + "\r\n");
+	CConnection::sendData(":" + CConnection::botnick + " NOTICE " + user + " :" + text + "\r\n");
 	return 1;
 }
 
