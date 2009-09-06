@@ -146,7 +146,7 @@ void CConnection::onDataReceived(char* msg)
         return;
 }
 
-void *messageThread(void* x)
+void *CConnection::messageThread(void *x)
 {
     while(true)
     {

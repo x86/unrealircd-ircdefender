@@ -21,7 +21,7 @@ class CConnection
 		int stopServer			();
 		int closesocket			(int socket);
 		int sendData			(std::string text);
-		void* messageThread		(void* x);
+		void* messageThread		(void *x);
 		void onDataReceived		(char* msg);
 	//private:
 		int ircSocket;
