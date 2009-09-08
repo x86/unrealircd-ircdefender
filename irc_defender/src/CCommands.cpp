@@ -1,7 +1,7 @@
 /*
     --------------------------------------------
     Project:    IRC Defender v1.0
-    Filename:   CConnection.h
+    Filename:   CCConnection::h
     Date:       09 August 2009
     Developers: i386 <sebasdevelopment@gmx.com>
     --------------------------------------------
@@ -15,9 +15,6 @@ using namespace std;
 #include "CCommands.h"
 #include "CLogging.h"
 #include "CConnection.h"
-
-CConnection connection;
-CLogging logging;
 
 // -----------------------------------------------------------
 int CCommands::search(char *string, char *substring)
@@ -56,7 +53,7 @@ int CCommands::handleCommands(char* data)
 	string str = data;
 
 	// Check
-	size_t found = str.find(" PRIVMSG " + connection.botnick + " :");
+	size_t found = str.find(" PRIVMSG " + CConnection::botnick + " :");
 	if (found == string::npos) { return 0; }
 
 	// Example for requesting help:
@@ -85,73 +82,73 @@ int CCommands::handleCommands(char* data)
 	if(command == "help" || command == "HELP")
 	{
 		status = "OK";
-		logging.sendMessage(user, "IRCDefender Commands:");
-		logging.sendMessage(user, "  Commands available to All:");
-		logging.sendMessage(user, "     HELP                  Shows the help list.");
-		logging.sendMessage(user, "     VERSION               Shows the version.");
-		logging.sendMessage(user, "     CREDITS               Shows the credits.");
-		logging.sendMessage(user, "  Commands available to Services Admins:");
-		logging.sendMessage(user, "     SET                   Configure IRCDefender.");
-		logging.sendMessage(user, "     SECURE                Modify the secure level.");
-		logging.sendMessage(user, "     JOIN                  ");
-		logging.sendMessage(user, "     PART                Modify the secure level.");
-		logging.sendMessage(user, "  Commands available to Network Administrators:");
-		logging.sendMessage(user, "     EXIT                  Terminate the program with no save.");
+		CLogging::sendMessage(user, "IRCDefender Commands:");
+		CLogging::sendMessage(user, "  Commands available to All:");
+		CLogging::sendMessage(user, "     HELP                  Shows the help list.");
+		CLogging::sendMessage(user, "     VERSION               Shows the version.");
+		CLogging::sendMessage(user, "     CREDITS               Shows the credits.");
+		CLogging::sendMessage(user, "  Commands available to Services Admins:");
+		CLogging::sendMessage(user, "     SET                   Configure IRCDefender.");
+		CLogging::sendMessage(user, "     SECURE                Modify the secure level.");
+		CLogging::sendMessage(user, "     JOIN                  ");
+		CLogging::sendMessage(user, "     PART                Modify the secure level.");
+		CLogging::sendMessage(user, "  Commands available to Network Administrators:");
+		CLogging::sendMessage(user, "     EXIT                  Terminate the program with no save.");
 	}else
 	if(command == "version" || command == "VERSION")
 	{
 		status = "OK";
-		logging.sendMessage(user, "IRCDefender Version:");
-		logging.sendMessage(user, "  Core: 1.0");
-		logging.sendMessage(user, "  Defender: 1.0.0003");
+		CLogging::sendMessage(user, "IRCDefender Version:");
+		CLogging::sendMessage(user, "  Core: 1.0");
+		CLogging::sendMessage(user, "  Defender: 1.0.0003");
 	}else
 	if(command == "credits" || command == "CREDITS")
 	{
 		status = "OK";
-		logging.sendMessage(user, "IRCDefender Credits:");
-		logging.sendMessage(user, "  Head developer(s):");
-		logging.sendMessage(user, "  - i386 <sebasdevelopment@gmx.com>");
+		CLogging::sendMessage(user, "IRCDefender Credits:");
+		CLogging::sendMessage(user, "  Head developer(s):");
+		CLogging::sendMessage(user, "  - i386 <sebasdevelopment@gmx.com>");
 	}else
 	if(command == "join" || command == "JOIN")
 	{
 		status = "OK";
-        connection.sendData(":" + connection.botnick + " JOIN " + arguments + "\r\n");
-        connection.sendData(":" + connection.botnick + " MODE " + arguments + " +ao " + connection.botnick + " " + connection.botnick + "\r\n");
+        CConnection::sendData(":" + CConnection::botnick + " JOIN " + arguments + "\r\n");
+        CConnection::sendData(":" + CConnection::botnick + " MODE " + arguments + " +ao " + CConnection::botnick + " " + CConnection::botnick + "\r\n");
 	}else
 	if(command == "part" || command == "PART")
 	{
 		status = "OK";
-		connection.sendData(":" + connection.botnick + " PART " + arguments + " :Requested by: " + user + "\r\n");
+		CConnection::sendData(":" + CConnection::botnick + " PART " + arguments + " :Requested by: " + user + "\r\n");
 	}else
 	/*if(command == "check" || command == "CHECK")
 	{
 		status = "OK";
 		if(getUserLevel(user, "a"))
 		{
-			connection.sendMessage(user, "You are Services Administrator!");
+			CConnection::sendMessage(user, "You are Services Administrator!");
 		}
 		if(getUserLevel(user, "N"))
 		{
-			connection.sendMessage(user, "You are Network Administrator!");
+			CConnection::sendMessage(user, "You are Network Administrator!");
 		}
 		if(getUserLevel(user, "o"))
 		{
-			connection.sendMessage(user, "You are Global Operator!");
+			CConnection::sendMessage(user, "You are Global Operator!");
 		}
 	}else*/
 	if(command == "raw" || command == "RAW")
 	{
 		status = "OK";
-		connection.sendData(arguments + "\r\n");
+		CConnection::sendData(arguments + "\r\n");
 	}
 	
 	if(status == "FAIL")
 	{
-		logging.sendMessage(user, "Command not found, try: /msg " + connection.botnick + " HELP");
+		CLogging::sendMessage(user, "Command not found, try: /msg " + CConnection::botnick + " HELP");
 	}
 
 	// Send the log!
-	logging.sendMessage(user, "Notice: All actions will be logged!");
-	logging.sendLog("[" + status + "] " + user + " requested command: " + command);
+	CLogging::sendMessage(user, "Notice: All actions will be logged!");
+	CLogging::sendLog("[" + status + "] " + user + " requested command: " + command);
 	return 1;
 }
