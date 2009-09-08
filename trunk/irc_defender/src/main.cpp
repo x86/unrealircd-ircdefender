@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 
     // Close server
 	CLogging::sendConsole("Stopping server..\n.");
-	CConnection::closesocket(connection.ircSocket);
+	CConnection::closesocket(CConnection::ircSocket);
 
     return 1;
 }
