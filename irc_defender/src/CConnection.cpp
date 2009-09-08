@@ -138,7 +138,7 @@ std::string CConnection::getVarData(char* var)
 	return "";
 }
 
-int CConnection::getVarData(char* var)
+int CConnection::getIntData(char* var)
 {
 	if(var == "ircport")
 	{
@@ -151,7 +151,7 @@ int CConnection::getVarData(char* var)
 	return 0;
 }
 
-bool CConnection::getVarData(char* var)
+bool CConnection::getBoolData(char* var)
 {
 	if(var == "enablelogging")
 	{

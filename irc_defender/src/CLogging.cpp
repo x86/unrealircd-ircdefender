@@ -19,7 +19,7 @@ using namespace std;
 // -----------------------------------------------------------
 int CLogging::sendLog(string text)
 {
-	if(CConnection::getVarData("enablelogging"))
+	if(CConnection::getBoolData("enablelogging"))
 	{
 		CConnection::sendData(":" + CConnection::getVarData("botnick") + " PRIVMSG " + CConnection::getVarData("logchannel") + " :" + text + "\r\n");
 	}

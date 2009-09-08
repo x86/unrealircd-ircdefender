@@ -22,8 +22,8 @@ class CConnection
 		static int closesocket			(int socket);
 		static int sendData			(std::string text);
 		static std::string getVarData		(char* var);
-		static int getVarData		(char* var);
-		static bool getVarData		(char* var);
+		static int getIntData		(char* var);
+		static bool getBoolData		(char* var);
 		static void *messageThread		(void *x);
 		static void onDataReceived		(char* msg);
 	//private:
