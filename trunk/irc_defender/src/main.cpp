@@ -19,9 +19,6 @@ using namespace std;
 // Functions
 //bool getUserLevel(std::string user, char* level);
 
-CConnection connection;
-CLogging logging;
-
 // -----------------------------------------------------------
 int main(int argc, char* argv[])
 {
@@ -51,18 +48,18 @@ int main(int argc, char* argv[])
 		if(strcmp(argv[1], "--config") == 0)
         {
 			// Start server
-			logging.sendConsole("Server started..\n");
-			connection.startServer(argv[2]);
+			CLogging::sendConsole("Server started..\n");
+			CConnection::startServer(argv[2]);
 		}
 	}else{
 		// Start server
-		logging.sendConsole("Server started..");
-		connection.startServer("defender.conf");
+		CLogging::sendConsole("Server started..");
+		CConnection::startServer("defender.conf");
 	}
 
     // Close server
-	logging.sendConsole("Stopping server..\n.");
-	connection.closesocket(connection.ircSocket);
+	CLogging::sendConsole("Stopping server..\n.");
+	CConnection::closesocket(connection.ircSocket);
 
     return 1;
 }
