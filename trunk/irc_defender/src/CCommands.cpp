@@ -53,7 +53,7 @@ int CCommands::handleCommands(char* data)
 	string str = data;
 
 	// Check
-	size_t found = str.find(" PRIVMSG " + CConnection::botnick + " :");
+	size_t found = str.find(" PRIVMSG " + CConnection::getVarData("botnick") + " :");
 	if (found == string::npos) { return 0; }
 
 	// Example for requesting help:
