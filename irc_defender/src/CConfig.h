@@ -1,4 +1,4 @@
-// ConfigFile.h
+// CConfig.h
 // Class for reading named values from configuration files
 // Richard J. Wagner  v2.1  24 May 2004  wagnerr@umich.edu
 
