@@ -26,15 +26,5 @@ class CConnection
 		static bool getBoolData		(char* var);
 		static void *messageThread		(void *x);
 		static void onDataReceived		(char* msg);
-	//private:
-		static int ircSocket;
-		static pthread_t t;
-		static std::string ircadres;
-		static int ircport;
-		static std::string ircpass;
-		static std::string servicesname;
-		static std::string botnick;
-		static std::string logchannel;
-		static bool enablelogging;
 };
 #endif

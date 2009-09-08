@@ -26,6 +26,16 @@ using namespace std;
 #include "CCommands.h"
 #include "CLogging.h"
 
+int ircSocket;
+pthread_t t;
+std::string ircadres;
+int ircport;
+std::string ircpass;
+std::string servicesname;
+std::string botnick;
+std::string logchannel;
+bool enablelogging;
+
 // -----------------------------------------------------------
 void CConnection::startServer(char* configfile)
 {
