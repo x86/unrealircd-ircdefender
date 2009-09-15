@@ -19,16 +19,16 @@ using namespace std;
 // -----------------------------------------------------------
 int CLogging::sendLog(string text)
 {
-	if(CConnection::getBoolData("enablelogging"))
+	if(CConnection::enablelogging)
 	{
-		CConnection::sendData(":" + CConnection::getVarData("botnick") + " PRIVMSG " + CConnection::getVarData("logchannel") + " :" + text + "\r\n");
+		CConnection::sendData(":" + CConnection::botnick + " PRIVMSG " + CConnection::logchannel + " :" + text + "\r\n");
 	}
 	return 1;
 }
 
 int CLogging::sendMessage(string user, string text)
 {
-	CConnection::sendData(":" + CConnection::getVarData("botnick") + " NOTICE " + user + " :" + text + "\r\n");
+	CConnection::sendData(":" + CConnection::botnick + " NOTICE " + user + " :" + text + "\r\n");
 	return 1;
 }
 
