@@ -19,6 +19,9 @@ using namespace std;
 // Functions
 //bool getUserLevel(std::string user, char* level);
 
+// Define vars
+int CConnection::ircSocket;
+
 // -----------------------------------------------------------
 int main(int argc, char* argv[])
 {
@@ -59,7 +62,7 @@ int main(int argc, char* argv[])
 
     // Close server
 	CLogging::sendConsole("Stopping server..\n.");
-	CConnection::closesocket(CConnection::getIntData("ircSocket"));
+	CConnection::closesocket(CConnection::ircSocket);
 
     return 1;
 }
