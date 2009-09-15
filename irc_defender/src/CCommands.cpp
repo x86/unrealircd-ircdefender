@@ -16,9 +16,6 @@ using namespace std;
 #include "CLogging.h"
 #include "CConnection.h"
 
-// Define vars.
-string CConnection::botnick;
-
 // -----------------------------------------------------------
 int CCommands::search(char *string, char *substring)
 {
