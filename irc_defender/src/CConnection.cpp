@@ -113,53 +113,6 @@ int CConnection::closesocket(int socket)
         return 1;
 }
 
-string CConnection::getVarData(char* var)
-{
-	if(var == "ircadres")
-	{
-		return ircadres;
-	}else
-	if(var == "ircpass")
-	{
-		return ircpass;
-	}else
-	if(var == "servicesname")
-	{
-		return servicesname;
-	}else
-	if(var == "botnick")
-	{
-		return botnick;
-	}else
-	if(var == "logchannel")
-	{
-		return logchannel;
-	}
-	return "";
-}
-
-int CConnection::getIntData(char* var)
-{
-	if(var == "ircport")
-	{
-		return ircport;
-	}else
-	if(var == "ircSocket")
-	{
-		return ircSocket;
-	}
-	return 0;
-}
-
-bool CConnection::getBoolData(char* var)
-{
-	if(var == "enablelogging")
-	{
-		return enablelogging;
-	}
-	return false;
-}
-
 void CConnection::onDataReceived(char* msg)
 {
 		// Error handler

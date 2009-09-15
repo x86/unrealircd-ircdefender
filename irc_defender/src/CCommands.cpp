@@ -16,6 +16,9 @@ using namespace std;
 #include "CLogging.h"
 #include "CConnection.h"
 
+// Define vars.
+string CConnection::botnick;
+
 // -----------------------------------------------------------
 int CCommands::search(char *string, char *substring)
 {
@@ -112,13 +115,13 @@ int CCommands::handleCommands(char* data)
 	if(command == "join" || command == "JOIN")
 	{
 		status = "OK";
-        CConnection::sendData(":" + CConnection::getVarData("botnick") + " JOIN " + arguments + "\r\n");
-        CConnection::sendData(":" + CConnection::getVarData("botnick") + " MODE " + arguments + " +ao " + CConnection::getVarData("botnick") + " " + CConnection::getVarData("botnick") + "\r\n");
+        CConnection::sendData(":" + CConnection::botnick + " JOIN " + arguments + "\r\n");
+        CConnection::sendData(":" + CConnection::botnick + " MODE " + arguments + " +ao " + CConnection::getVarData("botnick") + " " + CConnection::getVarData("botnick") + "\r\n");
 	}else
 	if(command == "part" || command == "PART")
 	{
 		status = "OK";
-		CConnection::sendData(":" + CConnection::getVarData("botnick") + " PART " + arguments + " :Requested by: " + user + "\r\n");
+		CConnection::sendData(":" + CConnection::botnick + " PART " + arguments + " :Requested by: " + user + "\r\n");
 	}else
 	/*if(command == "check" || command == "CHECK")
 	{
@@ -144,7 +147,7 @@ int CCommands::handleCommands(char* data)
 	
 	if(status == "FAIL")
 	{
-		CLogging::sendMessage(user, "Command not found, try: /msg " + CConnection::getVarData("botnick") + " HELP");
+		CLogging::sendMessage(user, "Command not found, try: /msg " + CConnection::botnick + " HELP");
 	}
 
 	// Send the log!
