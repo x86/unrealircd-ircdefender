@@ -116,7 +116,7 @@ int CCommands::handleCommands(char* data)
 	{
 		status = "OK";
         CConnection::sendData(":" + CConnection::botnick + " JOIN " + arguments + "\r\n");
-        CConnection::sendData(":" + CConnection::botnick + " MODE " + arguments + " +ao " + CConnection::getVarData("botnick") + " " + CConnection::getVarData("botnick") + "\r\n");
+        CConnection::sendData(":" + CConnection::botnick + " MODE " + arguments + " +ao " + CConnection::botnick + " " + CConnection::botnick + "\r\n");
 	}else
 	if(command == "part" || command == "PART")
 	{
