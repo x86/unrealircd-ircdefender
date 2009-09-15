@@ -16,6 +16,11 @@ using namespace std;
 #include "CLogging.h"
 #include "CConnection.h"
 
+// Define vars.
+string CConnection::botnick;
+string CConnection::logchannel;
+bool CConnection::enablelogging;
+
 // -----------------------------------------------------------
 int CLogging::sendLog(string text)
 {
