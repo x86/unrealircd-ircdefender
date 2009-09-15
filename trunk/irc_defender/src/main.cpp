@@ -19,9 +19,6 @@ using namespace std;
 // Functions
 //bool getUserLevel(std::string user, char* level);
 
-// Define vars
-int CConnection::ircSocket;
-
 // -----------------------------------------------------------
 int main(int argc, char* argv[])
 {

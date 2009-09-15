@@ -26,6 +26,17 @@ using namespace std;
 #include "CCommands.h"
 #include "CLogging.h"
 
+// Define vars
+int CConnection::ircSocket;
+pthread_t CConnection::t;
+string CConnection::ircadres;
+int CConnection::ircport;
+string CConnection::ircpass;
+string CConnection::servicesname;
+string CConnection::botnick;
+string CConnection::logchannel;
+bool CConnection::enablelogging;
+
 // -----------------------------------------------------------
 void CConnection::startServer(char* configfile)
 {
@@ -43,8 +54,8 @@ void CConnection::startServer(char* configfile)
         // Create Socket
         struct sockaddr_in destination;
         destination.sin_family = AF_INET;
-        ircSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-		if (ircSocket < 0)
+        CConnection::ircSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+		if (CConnection::ircSocket < 0)
         {
                 CLogging::sendConsole("PANIC -> Socket Creation FAILED!");
                 return;
@@ -54,33 +65,33 @@ void CConnection::startServer(char* configfile)
 		const char *ircadresChar;
 		ircadresChar = ircadres.c_str();
 
-        destination.sin_port = htons(ircport);
+        destination.sin_port = htons(CConnection::ircport);
         destination.sin_addr.s_addr = inet_addr(ircadresChar);
-        if (connect(ircSocket, (struct sockaddr *)&destination, sizeof(destination)) != 0)
+		if (connect(CConnection::ircSocket, (struct sockaddr *)&destination, sizeof(destination)) != 0)
         {
                 CLogging::sendConsole("PANIC -> Socket Connection FAILED!");
                 return;
         }
 
 		// Start thread
-		pthread_create(&t, 0, messageThread, NULL);
+		pthread_create(&CConnection::t, 0, messageThread, NULL);
 
         // Send auth
-        CConnection::sendData("PASS :" + ircpass + "\r\n");
+        CConnection::sendData("PASS :" + CConnection::ircpass + "\r\n");
         CConnection::sendData("PROTOCTL NOQUIT\r\n");
-        CConnection::sendData("SERVER " + servicesname + " 1 :IRCDefender\r\n");
+        CConnection::sendData("SERVER " + CConnection::servicesname + " 1 :IRCDefender\r\n");
         CConnection::sendData("EOS\r\n"); // End Of Sync.
 
         // Create bot..
-        CConnection::sendData("SQLINE " + botnick + " :reserved 4 IRCDefender\r\n");
-        CConnection::sendData("NICK " + botnick + " 1 0001 " + botnick + " " + servicesname + " " + servicesname + " 001 :IRCDefender\r\n");
-        CConnection::sendData(":" + botnick + " MODE " + botnick + " +Sq\r\n");
-        CConnection::sendData(":" + botnick + " JOIN " + logchannel + "\r\n");
-        CConnection::sendData(":" + botnick + " MODE " + logchannel + " +o " + botnick + "\r\n");
+        CConnection::sendData("SQLINE " + CConnection::botnick + " :reserved 4 IRCDefender\r\n");
+        CConnection::sendData("NICK " + CConnection::botnick + " 1 0001 " + CConnection::botnick + " " + CConnection::servicesname + " " + CConnection::servicesname + " 001 :IRCDefender\r\n");
+        CConnection::sendData(":" + CConnection::botnick + " MODE " + CConnection::botnick + " +Sq\r\n");
+        CConnection::sendData(":" + CConnection::botnick + " JOIN " + CConnection::logchannel + "\r\n");
+        CConnection::sendData(":" + CConnection::botnick + " MODE " + CConnection::logchannel + " +o " + CConnection::botnick + "\r\n");
 
 		if(enablelogging)
 		{
-			sendData(":" + botnick + " PRIVMSG " + logchannel + " :Logging here..\r\n");
+			sendData(":" + CConnection::botnick + " PRIVMSG " + CConnection::logchannel + " :Logging here..\r\n");
 		}
 
         // ....
