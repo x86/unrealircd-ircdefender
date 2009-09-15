@@ -17,6 +17,18 @@
 class CConnection
 {
 	public:
+		// Vars
+		static int ircSocket;
+		static pthread_t t;
+		static std::string ircadres;
+		static int ircport;
+		static std::string ircpass;
+		static std::string servicesname;
+		static std::string botnick;
+		static std::string logchannel;
+		static bool enablelogging;
+
+		// Funcs
 		static void startServer		(char* configfile);
 		static int stopServer			();
 		static int closesocket			(int socket);

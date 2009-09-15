@@ -26,16 +26,6 @@ using namespace std;
 #include "CCommands.h"
 #include "CLogging.h"
 
-int ircSocket;
-pthread_t t;
-std::string ircadres;
-int ircport;
-std::string ircpass;
-std::string servicesname;
-std::string botnick;
-std::string logchannel;
-bool enablelogging;
-
 // -----------------------------------------------------------
 void CConnection::startServer(char* configfile)
 {
@@ -54,7 +44,7 @@ void CConnection::startServer(char* configfile)
         struct sockaddr_in destination;
         destination.sin_family = AF_INET;
         ircSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-        if (ircSocket < 0)
+		if (ircSocket < 0)
         {
                 CLogging::sendConsole("PANIC -> Socket Creation FAILED!");
                 return;
@@ -79,7 +69,7 @@ void CConnection::startServer(char* configfile)
         CConnection::sendData("PASS :" + ircpass + "\r\n");
         CConnection::sendData("PROTOCTL NOQUIT\r\n");
         CConnection::sendData("SERVER " + servicesname + " 1 :IRCDefender\r\n");
-        CConnection::sendData("EOS\r\n");
+        CConnection::sendData("EOS\r\n"); // End Of Sync.
 
         // Create bot..
         CConnection::sendData("SQLINE " + botnick + " :reserved 4 IRCDefender\r\n");
@@ -123,7 +113,7 @@ int CConnection::closesocket(int socket)
         return 1;
 }
 
-std::string CConnection::getVarData(char* var)
+string CConnection::getVarData(char* var)
 {
 	if(var == "ircadres")
 	{
