@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
         {
             printf("\n---------------------[IRC Defender Credits]-------------\n");
             printf("  Head developer(s):");
-            printf(" - i386           <sebasdevelopment@gmx.com");
+            printf(" - i386           <sebasdevelopment@gmx.com>");
             printf("\n");
             printf("  Special thanks:");
             printf(" - UnrealIRCd\n");

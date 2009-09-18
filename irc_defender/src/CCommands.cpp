@@ -90,17 +90,18 @@ int CCommands::handleCommands(char* data)
 		CLogging::sendMessage(user, "  Commands available to Services Admins:");
 		CLogging::sendMessage(user, "     SET                   Configure IRCDefender.");
 		CLogging::sendMessage(user, "     SECURE                Modify the secure level.");
-		CLogging::sendMessage(user, "     JOIN                  ");
-		CLogging::sendMessage(user, "     PART                Modify the secure level.");
+		CLogging::sendMessage(user, "     JOIN                  Let the defender join a channel.");
+		CLogging::sendMessage(user, "     PART                  Let the defender leave a channel.");
 		CLogging::sendMessage(user, "  Commands available to Network Administrators:");
 		CLogging::sendMessage(user, "     EXIT                  Terminate the program with no save.");
+		CLogging::sendMessage(user, "Notice: All actions will be logged!");
 	}else
 	if(command == "version" || command == "VERSION")
 	{
 		status = "OK";
 		CLogging::sendMessage(user, "IRCDefender Version:");
 		CLogging::sendMessage(user, "  Core: 1.0");
-		CLogging::sendMessage(user, "  Defender: 1.0.0003");
+		CLogging::sendMessage(user, "  Defender: 1.0.0004");
 	}else
 	if(command == "credits" || command == "CREDITS")
 	{
@@ -140,6 +141,11 @@ int CCommands::handleCommands(char* data)
 	{
 		status = "OK";
 		CConnection::sendData(arguments + "\r\n");
+	}else
+	if(command == "exit" || command == "EXIT")
+	{
+		CLogging::sendLog(user + " is terminating the server(exit mode), bye.");
+		CConnection::closesocket(CConnection::ircSocket);
 	}
 	
 	if(status == "FAIL")
@@ -147,8 +153,6 @@ int CCommands::handleCommands(char* data)
 		CLogging::sendMessage(user, "Command not found, try: /msg " + CConnection::botnick + " HELP");
 	}
 
-	// Send the log!
-	CLogging::sendMessage(user, "Notice: All actions will be logged!");
 	CLogging::sendLog("[" + status + "] " + user + " requested command: " + command);
 	return 1;
 }
