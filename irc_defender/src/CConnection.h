@@ -33,7 +33,6 @@ class CConnection
 		static int stopServer			();
 		static int closesocket			(int socket);
 		static int sendData				(std::string text);
-		static void msleep				(int s);
 		static void *messageThread		(void *x);
 		static void onDataReceived		(char* msg);
 };
