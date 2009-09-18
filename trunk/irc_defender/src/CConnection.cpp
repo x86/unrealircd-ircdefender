@@ -168,7 +168,7 @@ void *CConnection::messageThread(void *x)
                         {
 								CConnection::onDataReceived(part);
                                 memset(&part, 0, sizeof(part));
-								usleep(70); // MS
+								usleep(70);
                         }else
                         if (buf[i] != '\r')
                         {
@@ -176,5 +176,6 @@ void *CConnection::messageThread(void *x)
                         }
                 }
          }
+		 usleep(70);
     }
 }
