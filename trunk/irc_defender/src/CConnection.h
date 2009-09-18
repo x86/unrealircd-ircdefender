@@ -29,10 +29,11 @@ class CConnection
 		static bool enablelogging;
 
 		// Funcs
-		static void startServer		(char* configfile);
+		static void startServer			(char* configfile);
 		static int stopServer			();
 		static int closesocket			(int socket);
-		static int sendData			(std::string text);
+		static int sendData				(std::string text);
+		static void msleep				(int s);
 		static void *messageThread		(void *x);
 		static void onDataReceived		(char* msg);
 };

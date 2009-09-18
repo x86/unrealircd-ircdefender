@@ -152,6 +152,12 @@ void CConnection::onDataReceived(char* msg)
         return;
 }
 
+void CConnection::msleep(int s)
+{
+	usleep(s * 1000);
+}
+
+
 void *CConnection::messageThread(void *x)
 {
     while(true)
